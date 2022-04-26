@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hz.mapper.VehicleTollMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.hz.pojo.VehicleToll">
+        <id column="vehicle_toll_id" property="vehicleTollId" />
+        <result column="vehicle_toll_weight" property="vehicleTollWeight" />
+        <result column="vehicle_toll_price" property="vehicleTollPrice" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        vehicle_toll_id, vehicle_toll_weight, vehicle_toll_price
+    </sql>
+
+</mapper>

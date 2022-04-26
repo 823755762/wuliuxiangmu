@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hz.mapper.OrderssMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.hz.pojo.Orderss">
+        <id column="order_id" property="orderId" />
+        <result column="vehicle_id" property="vehicleId" />
+        <result column="waybill_id" property="waybillId" />
+        <result column="order_from" property="orderFrom" />
+        <result column="client_name" property="clientName" />
+        <result column="client_phone" property="clientPhone" />
+        <result column="client_id_number" property="clientIdNumber" />
+        <result column="prepayment_amount" property="prepaymentAmount" />
+        <result column="remaining_amount" property="remainingAmount" />
+        <result column="order_from_title" property="orderFromTitle" />
+        <result column="order_from_x" property="orderFromX" />
+        <result column="order_from_y" property="orderFromY" />
+        <result column="accept_name" property="acceptName" />
+        <result column="accept_phone" property="acceptPhone" />
+        <result column="contract_picture" property="contractPicture" />
+        <result column="order_state" property="orderState" />
+        <result column="order_finish_title" property="orderFinishTitle" />
+        <result column="order_finish_x" property="orderFinishX" />
+        <result column="order_finish_y" property="orderFinishY" />
+        <result column="order_mileage" property="orderMileage" />
+        <result column="order_spend_time" property="orderSpendTime" />
+        <result column="order_estimated_amount" property="orderEstimatedAmount" />
+        <result column="order_actual_amount" property="orderActualAmount" />
+        <result column="admin_id" property="adminId" />
+        <result column="order_remarks" property="orderRemarks" />
+        <result column="order_delivery_time" property="orderDeliveryTime" />
+        <result column="order_arrival_time" property="orderArrivalTime" />
+        <result column="deleted" property="deleted" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        order_id, vehicle_id, waybill_id, order_from, client_name, client_phone, client_id_number, prepayment_amount, remaining_amount, order_from_title, order_from_x, order_from_y, accept_name, accept_phone, contract_picture, order_state, order_finish_title, order_finish_x, order_finish_y, order_mileage, order_spend_time, order_estimated_amount, order_actual_amount, admin_id, order_remarks, order_delivery_time, order_arrival_time, deleted, create_time, update_time
+    </sql>
+
+</mapper>

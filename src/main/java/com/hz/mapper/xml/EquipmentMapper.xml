@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hz.mapper.EquipmentMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.hz.pojo.Equipment">
+        <id column="equipment_id" property="equipmentId" />
+        <result column="equipment_serial" property="equipmentSerial" />
+        <result column="equipment_name" property="equipmentName" />
+        <result column="equipment_type" property="equipmentType" />
+        <result column="equipment_connect_id" property="equipmentConnectId" />
+        <result column="equipment_parameter1" property="equipmentParameter1" />
+        <result column="equipment_parameter2" property="equipmentParameter2" />
+        <result column="equipment_parameter3" property="equipmentParameter3" />
+        <result column="equipment_time" property="equipmentTime" />
+        <result column="equipment_status" property="equipmentStatus" />
+        <result column="equipment_remarks" property="equipmentRemarks" />
+        <result column="deleted" property="deleted" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        equipment_id, equipment_serial, equipment_name, equipment_type, equipment_connect_id, equipment_parameter1, equipment_parameter2, equipment_parameter3, equipment_time, equipment_status, equipment_remarks, deleted, create_time, update_time
+    </sql>
+
+</mapper>

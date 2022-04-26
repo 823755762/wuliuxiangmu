@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hz.mapper.DriverMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.hz.pojo.Driver">
+        <id column="driver_id" property="driverId" />
+        <result column="driver_name" property="driverName" />
+        <result column="driver_Idcard" property="driverIdcard" />
+        <result column="driver_phone" property="driverPhone" />
+        <result column="driver_license_photo" property="driverLicensePhoto" />
+        <result column="driver_type" property="driverType" />
+        <result column="driver_sex" property="driverSex" />
+        <result column="driver_age" property="driverAge" />
+        <result column="driver_address" property="driverAddress" />
+        <result column="driver_attribution_id" property="driverAttributionId" />
+        <result column="driver_license_expiration_time" property="driverLicenseExpirationTime" />
+        <result column="driver_state" property="driverState" />
+        <result column="deleted" property="deleted" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        driver_id, driver_name, driver_Idcard, driver_phone, driver_license_photo, driver_type, driver_sex, driver_age, driver_address, driver_attribution_id, driver_license_expiration_time, driver_state, deleted, create_time, update_time
+    </sql>
+
+</mapper>

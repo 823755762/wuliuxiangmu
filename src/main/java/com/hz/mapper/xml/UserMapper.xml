@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hz.mapper.UserMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.hz.pojo.User">
+        <id column="user_id" property="userId" />
+        <result column="user_name" property="userName" />
+        <result column="user_pwd" property="userPwd" />
+        <result column="role_id" property="roleId" />
+        <result column="user_finallytime" property="userFinallytime" />
+        <result column="user_finallyip" property="userFinallyip" />
+        <result column="user_creation_id" property="userCreationId" />
+        <result column="user_creation_time" property="userCreationTime" />
+        <result column="user_remark_column" property="userRemarkColumn" />
+        <result column="user_state" property="userState" />
+        <result column="deleted" property="deleted" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        user_id, user_name, user_pwd, role_id, user_finallytime, user_finallyip, user_creation_id, user_creation_time, user_remark_column, user_state, deleted, create_time, update_time
+    </sql>
+
+</mapper>

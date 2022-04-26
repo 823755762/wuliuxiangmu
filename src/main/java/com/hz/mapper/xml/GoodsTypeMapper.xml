@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hz.mapper.GoodsTypeMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.hz.pojo.GoodsType">
+        <id column="goods_type_id" property="goodsTypeId" />
+        <result column="goods_type_name" property="goodsTypeName" />
+        <result column="goods_type_parent_id" property="goodsTypeParentId" />
+        <result column="goods_type_remarks" property="goodsTypeRemarks" />
+        <result column="goods_type_money" property="goodsTypeMoney" />
+        <result column="deleted" property="deleted" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        goods_type_id, goods_type_name, goods_type_parent_id, goods_type_remarks, goods_type_money, deleted, create_time, update_time
+    </sql>
+
+</mapper>

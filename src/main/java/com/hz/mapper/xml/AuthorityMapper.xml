@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hz.mapper.AuthorityMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.hz.pojo.Authority">
+        <id column="authority_id" property="authorityId" />
+        <result column="authority_name" property="authorityName" />
+        <result column="authority_path" property="authorityPath" />
+        <result column="authority_logo" property="authorityLogo" />
+        <result column="authority_parent_topic_id" property="authorityParentTopicId" />
+        <result column="authority_class" property="authorityClass" />
+        <result column="authority_sort" property="authoritySort" />
+        <result column="role_id" property="roleId" />
+        <result column="deleted" property="deleted" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        authority_id, authority_name, authority_path, authority_logo, authority_parent_topic_id, authority_class, authority_sort, role_id, deleted, create_time, update_time
+    </sql>
+
+</mapper>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hz.mapper.EmployeesMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.hz.pojo.Employees">
+        <id column="employees_id" property="employeesId" />
+        <result column="employees_name" property="employeesName" />
+        <result column="employees_sex" property="employeesSex" />
+        <result column="employees_address" property="employeesAddress" />
+        <result column="employees_phone" property="employeesPhone" />
+        <result column="employees_Idcard" property="employeesIdcard" />
+        <result column="employees_password" property="employeesPassword" />
+        <result column="employees_inductiontime" property="employeesInductiontime" />
+        <result column="employees_create_time" property="employeesCreateTime" />
+        <result column="admin_id" property="adminId" />
+        <result column="employees_state" property="employeesState" />
+        <result column="department_id" property="departmentId" />
+        <result column="deleted" property="deleted" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        employees_id, employees_name, employees_sex, employees_address, employees_phone, employees_Idcard, employees_password, employees_inductiontime, employees_create_time, admin_id, employees_state, department_id, deleted, create_time, update_time
+    </sql>
+
+</mapper>

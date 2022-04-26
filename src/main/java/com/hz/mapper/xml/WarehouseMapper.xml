@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hz.mapper.WarehouseMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.hz.pojo.Warehouse">
+        <id column="warehouse_id" property="warehouseId" />
+        <result column="warehouse_type" property="warehouseType" />
+        <result column="warehouse_svolume" property="warehouseSvolume" />
+        <result column="warehouse_residue" property="warehouseResidue" />
+        <result column="warehouse_number" property="warehouseNumber" />
+        <result column="warehouse_highly" property="warehouseHighly" />
+        <result column="warehouse_state" property="warehouseState" />
+        <result column="warehouse_note" property="warehouseNote" />
+        <result column="deleted" property="deleted" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        warehouse_id, warehouse_type, warehouse_svolume, warehouse_residue, warehouse_number, warehouse_highly, warehouse_state, warehouse_note, deleted, create_time, update_time
+    </sql>
+
+</mapper>

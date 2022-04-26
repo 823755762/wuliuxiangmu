@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hz.mapper.EquipmentLogMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.hz.pojo.EquipmentLog">
+        <id column="equipment_log_id" property="equipmentLogId" />
+        <result column="equipment_log_time" property="equipmentLogTime" />
+        <result column="equipment_log_equipment_id" property="equipmentLogEquipmentId" />
+        <result column="employee_id" property="employeeId" />
+        <result column="equipment_log_describe" property="equipmentLogDescribe" />
+        <result column="deleted" property="deleted" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        equipment_log_id, equipment_log_time, equipment_log_equipment_id, employee_id, equipment_log_describe, deleted, create_time, update_time
+    </sql>
+
+</mapper>
