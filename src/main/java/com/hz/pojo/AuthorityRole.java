@@ -1,60 +1,57 @@
-package com.hz.pojo;
+package com.sample;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import java.util.Date;
-import com.baomidou.mybatisplus.annotation.Version;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.TableLogic;
-import com.baomidou.mybatisplus.annotation.TableField;
-import java.io.Serializable;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.experimental.Accessors;
 
-/**
- * <p>
- * 
- * </p>
- *
- * @author UserG
- * @since 2022-04-26
- */
-@Data
-@EqualsAndHashCode(callSuper = false)
-@Accessors(chain = true)
-public class AuthorityRole implements Serializable {
+public class AuthorityRole {
 
-    private static final long serialVersionUID=1L;
+  private long rolePathId;
+  private long roleId;
+  private long deleted;
+  private java.sql.Timestamp createTime;
+  private java.sql.Timestamp updateTime;
 
-    /**
-     * 角色ID
-     */
-    @TableId(value = "role_path_id", type = IdType.AUTO)
-    private Long rolePathId;
 
-    /**
-     * 权限名
-     */
-    private Long roleId;
+  public long getRolePathId() {
+    return rolePathId;
+  }
 
-    /**
-     * 逻辑删除0-->正常 1-->删除
-     */
-    @TableLogic
-    private Integer deleted;
+  public void setRolePathId(long rolePathId) {
+    this.rolePathId = rolePathId;
+  }
 
-    /**
-     * 创建时间
-     */
-    @TableField(fill = FieldFill.INSERT)
-    private Date createTime;
 
-    /**
-     * 修改时间
-     */
-    @TableField(fill = FieldFill.INSERT_UPDATE)
-    private Date updateTime;
+  public long getRoleId() {
+    return roleId;
+  }
 
+  public void setRoleId(long roleId) {
+    this.roleId = roleId;
+  }
+
+
+  public long getDeleted() {
+    return deleted;
+  }
+
+  public void setDeleted(long deleted) {
+    this.deleted = deleted;
+  }
+
+
+  public java.sql.Timestamp getCreateTime() {
+    return createTime;
+  }
+
+  public void setCreateTime(java.sql.Timestamp createTime) {
+    this.createTime = createTime;
+  }
+
+
+  public java.sql.Timestamp getUpdateTime() {
+    return updateTime;
+  }
+
+  public void setUpdateTime(java.sql.Timestamp updateTime) {
+    this.updateTime = updateTime;
+  }
 
 }
