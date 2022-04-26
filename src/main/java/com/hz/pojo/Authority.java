@@ -1,117 +1,90 @@
-package com.sample;
+package com.hz.pojo;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import java.util.Date;
+import com.baomidou.mybatisplus.annotation.Version;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.TableLogic;
+import com.baomidou.mybatisplus.annotation.TableField;
+import java.io.Serializable;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
 
-public class Authority {
+/**
+ * <p>
+ * 
+ * </p>
+ *
+ * @author UserG
+ * @since 2022-04-26
+ */
+@Data
+@EqualsAndHashCode(callSuper = false)
+@Accessors(chain = true)
+public class Authority implements Serializable {
 
-  private long authorityId;
-  private String authorityName;
-  private String authorityPath;
-  private String authorityLogo;
-  private long authorityParentTopicId;
-  private long authorityClass;
-  private long authoritySort;
-  private long roleId;
-  private long deleted;
-  private java.sql.Timestamp createTime;
-  private java.sql.Timestamp updateTime;
+    private static final long serialVersionUID=1L;
 
+    /**
+     * 权限ID
+     */
+    @TableId(value = "authority_id", type = IdType.AUTO)
+    private Long authorityId;
 
-  public long getAuthorityId() {
-    return authorityId;
-  }
+    /**
+     * 权限名称
+     */
+    private String authorityName;
 
-  public void setAuthorityId(long authorityId) {
-    this.authorityId = authorityId;
-  }
+    /**
+     * 权限路径
+     */
+    private String authorityPath;
 
+    /**
+     * 权限图标
+     */
+    private String authorityLogo;
 
-  public String getAuthorityName() {
-    return authorityName;
-  }
+    /**
+     * 父级ID
+     */
+    private Long authorityParentTopicId;
 
-  public void setAuthorityName(String authorityName) {
-    this.authorityName = authorityName;
-  }
+    /**
+     * 等级
+     */
+    private Integer authorityClass;
 
+    /**
+     * 排序
+     */
+    private Integer authoritySort;
 
-  public String getAuthorityPath() {
-    return authorityPath;
-  }
+    /**
+     * 角色id
+     */
+    private Date roleId;
 
-  public void setAuthorityPath(String authorityPath) {
-    this.authorityPath = authorityPath;
-  }
+    /**
+     * 逻辑删除0-->正常 1-->删除
+     */
+    @TableLogic
+    private Integer deleted;
 
+    /**
+     * 创建时间
+     */
+    @TableField(fill = FieldFill.INSERT)
+    private Date createTime;
 
-  public String getAuthorityLogo() {
-    return authorityLogo;
-  }
+    /**
+     * 修改时间
+     */
+    @TableField(fill = FieldFill.INSERT_UPDATE)
+    private Date updateTime;
 
-  public void setAuthorityLogo(String authorityLogo) {
-    this.authorityLogo = authorityLogo;
-  }
-
-
-  public long getAuthorityParentTopicId() {
-    return authorityParentTopicId;
-  }
-
-  public void setAuthorityParentTopicId(long authorityParentTopicId) {
-    this.authorityParentTopicId = authorityParentTopicId;
-  }
-
-
-  public long getAuthorityClass() {
-    return authorityClass;
-  }
-
-  public void setAuthorityClass(long authorityClass) {
-    this.authorityClass = authorityClass;
-  }
-
-
-  public long getAuthoritySort() {
-    return authoritySort;
-  }
-
-  public void setAuthoritySort(long authoritySort) {
-    this.authoritySort = authoritySort;
-  }
-
-
-  public long getRoleId() {
-    return roleId;
-  }
-
-  public void setRoleId(long roleId) {
-    this.roleId = roleId;
-  }
-
-
-  public long getDeleted() {
-    return deleted;
-  }
-
-  public void setDeleted(long deleted) {
-    this.deleted = deleted;
-  }
-
-
-  public java.sql.Timestamp getCreateTime() {
-    return createTime;
-  }
-
-  public void setCreateTime(java.sql.Timestamp createTime) {
-    this.createTime = createTime;
-  }
-
-
-  public java.sql.Timestamp getUpdateTime() {
-    return updateTime;
-  }
-
-  public void setUpdateTime(java.sql.Timestamp updateTime) {
-    this.updateTime = updateTime;
-  }
 
 }

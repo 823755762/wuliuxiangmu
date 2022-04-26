@@ -1,127 +1,95 @@
-package com.sample;
+package com.hz.pojo;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import java.util.Date;
+import com.baomidou.mybatisplus.annotation.Version;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.TableLogic;
+import com.baomidou.mybatisplus.annotation.TableField;
+import java.io.Serializable;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
 
-public class Role {
+/**
+ * <p>
+ * 
+ * </p>
+ *
+ * @author UserG
+ * @since 2022-04-26
+ */
+@Data
+@EqualsAndHashCode(callSuper = false)
+@Accessors(chain = true)
+public class Role implements Serializable {
 
-  private long roleId;
-  private String roleSupperAdmin;
-  private String roleEncoding;
-  private long roleDescribe;
-  private java.sql.Timestamp roleCreator;
-  private java.sql.Timestamp roleCreationTime;
-  private String roleModifier;
-  private java.sql.Timestamp roleModificationTime;
-  private long roleState;
-  private long deleted;
-  private java.sql.Timestamp createTime;
-  private java.sql.Timestamp updateTime;
+    private static final long serialVersionUID=1L;
 
+    /**
+     * 角色ID
+     */
+    @TableId(value = "role_id", type = IdType.AUTO)
+    private Long roleId;
 
-  public long getRoleId() {
-    return roleId;
-  }
+    /**
+     * 角色名称
+     */
+    private String roleSupperAdmin;
 
-  public void setRoleId(long roleId) {
-    this.roleId = roleId;
-  }
+    /**
+     * 角色编码
+     */
+    private String roleEncoding;
 
+    /**
+     * 角色描述
+     */
+    private Long roleDescribe;
 
-  public String getRoleSupperAdmin() {
-    return roleSupperAdmin;
-  }
+    /**
+     * 创建人
+     */
+    private Date roleCreator;
 
-  public void setRoleSupperAdmin(String roleSupperAdmin) {
-    this.roleSupperAdmin = roleSupperAdmin;
-  }
+    /**
+     * 最后一次登录IP
+     */
+    private Date roleCreationTime;
 
+    /**
+     * 修改人
+     */
+    private String roleModifier;
 
-  public String getRoleEncoding() {
-    return roleEncoding;
-  }
+    /**
+     * 修改时间
+     */
+    private Date roleModificationTime;
 
-  public void setRoleEncoding(String roleEncoding) {
-    this.roleEncoding = roleEncoding;
-  }
+    /**
+     * 角色状态
+     */
+    private Integer roleState;
 
+    /**
+     * 逻辑删除0-->正常 1-->删除
+     */
+    @TableLogic
+    private Integer deleted;
 
-  public long getRoleDescribe() {
-    return roleDescribe;
-  }
+    /**
+     * 创建时间
+     */
+    @TableField(fill = FieldFill.INSERT)
+    private Date createTime;
 
-  public void setRoleDescribe(long roleDescribe) {
-    this.roleDescribe = roleDescribe;
-  }
+    /**
+     * 修改时间
+     */
+    @TableField(fill = FieldFill.INSERT_UPDATE)
+    private Date updateTime;
 
-
-  public java.sql.Timestamp getRoleCreator() {
-    return roleCreator;
-  }
-
-  public void setRoleCreator(java.sql.Timestamp roleCreator) {
-    this.roleCreator = roleCreator;
-  }
-
-
-  public java.sql.Timestamp getRoleCreationTime() {
-    return roleCreationTime;
-  }
-
-  public void setRoleCreationTime(java.sql.Timestamp roleCreationTime) {
-    this.roleCreationTime = roleCreationTime;
-  }
-
-
-  public String getRoleModifier() {
-    return roleModifier;
-  }
-
-  public void setRoleModifier(String roleModifier) {
-    this.roleModifier = roleModifier;
-  }
-
-
-  public java.sql.Timestamp getRoleModificationTime() {
-    return roleModificationTime;
-  }
-
-  public void setRoleModificationTime(java.sql.Timestamp roleModificationTime) {
-    this.roleModificationTime = roleModificationTime;
-  }
-
-
-  public long getRoleState() {
-    return roleState;
-  }
-
-  public void setRoleState(long roleState) {
-    this.roleState = roleState;
-  }
-
-
-  public long getDeleted() {
-    return deleted;
-  }
-
-  public void setDeleted(long deleted) {
-    this.deleted = deleted;
-  }
-
-
-  public java.sql.Timestamp getCreateTime() {
-    return createTime;
-  }
-
-  public void setCreateTime(java.sql.Timestamp createTime) {
-    this.createTime = createTime;
-  }
-
-
-  public java.sql.Timestamp getUpdateTime() {
-    return updateTime;
-  }
-
-  public void setUpdateTime(java.sql.Timestamp updateTime) {
-    this.updateTime = updateTime;
-  }
 
 }
