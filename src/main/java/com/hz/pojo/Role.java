@@ -41,32 +41,27 @@ public class Role implements Serializable {
     /**
      * 角色编码
      */
-    private String roleEncoding;
+    private String roleIds;
 
     /**
      * 角色描述
      */
-    private Long roleDescribe;
+    private String roleDescribe;
 
     /**
      * 创建人
      */
-    private Date roleCreator;
+    private String roleCreator;
 
     /**
-     * 最后一次登录IP
+     * 最后一次登录时间
      */
-    private Date roleCreationTime;
+    private String roleCreationTime;
 
     /**
      * 修改人
      */
     private String roleModifier;
-
-    /**
-     * 修改时间
-     */
-    private Date roleModificationTime;
 
     /**
      * 角色状态
@@ -82,14 +77,12 @@ public class Role implements Serializable {
     /**
      * 创建时间
      */
-    @TableField(fill = FieldFill.INSERT)
-    private Date createTime;
+    private String createTime;
 
     /**
      * 修改时间
      */
-    @TableField(fill = FieldFill.INSERT_UPDATE)
-    private Date updateTime;
+    private String updateTime;
 
 
 }

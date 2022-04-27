@@ -2,22 +2,33 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hz.mapper.EquipmentFireMapper">
 
-    <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.hz.pojo.EquipmentFire">
-        <id column="equipment_fire_id" property="equipmentFireId" />
-        <result column="equipment_fire_name" property="equipmentFireName" />
-        <result column="equipment_fire_describe" property="equipmentFireDescribe" />
-        <result column="equipment_fire_location_describe" property="equipmentFireLocationDescribe" />
-        <result column="employees_id" property="employeesId" />
-        <result column="warehouse_id" property="warehouseId" />
-        <result column="deleted" property="deleted" />
-        <result column="create_time" property="createTime" />
-        <result column="update_time" property="updateTime" />
-    </resultMap>
 
-    <!-- 通用查询结果列 -->
-    <sql id="Base_Column_List">
-        equipment_fire_id, equipment_fire_name, equipment_fire_describe, equipment_fire_location_describe, employees_id, warehouse_id, deleted, create_time, update_time
+    <sql id="provider_where">
+        <where>
+            <if test="proName!=null">
+                proName like concat('%',#{proName},'%')</if>
+            <if test="proDesc!=null">
+                and proDesc like concat('%',#{proDesc},'%')</if>
+        </where>
     </sql>
+
+
+    <select id="findProviderList1" resultType="EquipmentFire">
+        select * from equipment_fire
+        <include refid="provider_where"/>
+        order by creationDate desc
+        limit #{pyl},#{page_size}
+    </select>
+
+
+    <select id="findProviderListCount1" resultType="int">
+        select count(1) from equipment_fire
+        <include refid="provider_where"/>
+    </select>
+
+
+
+
+
 
 </mapper>
