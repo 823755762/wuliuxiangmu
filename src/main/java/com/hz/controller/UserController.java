@@ -56,10 +56,10 @@ public class UserController {
         }
         if ("" != start_time && start_time != null) {
 
-            queryWrap.apply("date_format(user_finallytime,'%Y-%m-%d') >= date_format( '" + start_time + " ','%Y-%m-%d')");
+            queryWrap.apply("date_format(create_time,'%Y-%m-%d') >= date_format( '" + start_time + " ','%Y-%m-%d')");
         }
         if ("" != end_time && end_time != null) {
-            queryWrap.apply("date_format(user_finallytime,'%Y-%m-%d') <= date_format( '" + end_time + " ','%Y-%m-%d')");
+            queryWrap.apply("date_format(create_time,'%Y-%m-%d') <= date_format( '" + end_time + " ','%Y-%m-%d')");
 
         }
         queryWrap.orderByDesc("create_time");
