@@ -12,7 +12,7 @@ public class JsonMassage<T> {
     private Integer code;
     private String msg;
     //总条数
-    private Integer count;
+    private Integer dataCount;
     //数据
     private T data;
 }
