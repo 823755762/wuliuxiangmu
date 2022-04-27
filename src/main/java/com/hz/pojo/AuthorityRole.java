@@ -30,13 +30,13 @@ public class AuthorityRole implements Serializable {
     /**
      * 角色ID
      */
-    @TableId(value = "role_path_id", type = IdType.AUTO)
-    private Long rolePathId;
+    @TableId(value = "role_id", type = IdType.AUTO)
+    private Long roleId;
 
     /**
      * 权限名
      */
-    private Long roleId;
+    private Long authorityId;
 
     /**
      * 逻辑删除0-->正常 1-->删除
