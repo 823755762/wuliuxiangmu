@@ -46,12 +46,12 @@ public class Role implements Serializable {
     /**
      * 角色描述
      */
-    private Long roleDescribe;
+    private String roleDescribe;
 
     /**
      * 创建人
      */
-    private Date roleCreator;
+    private String roleCreator;
 
     /**
      * 最后一次登录IP
