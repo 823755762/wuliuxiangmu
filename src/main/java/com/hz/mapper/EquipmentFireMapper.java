@@ -23,7 +23,7 @@ public interface EquipmentFireMapper extends BaseMapper<EquipmentFire> {
      * @param page_size 每页显示条数
      * @return
      */
-    public List<EquipmentFire> findBillList1(
+    public List<EquipmentFire> findProviderList1(
             @Param("pyl") Integer pyl,
             @Param("page_size") Integer page_size,
             @Param("productName") String productName,

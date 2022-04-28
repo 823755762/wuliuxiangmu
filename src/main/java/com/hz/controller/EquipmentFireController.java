@@ -32,52 +32,49 @@ public class EquipmentFireController {
     private EquipmentFireMapper equipmentFireMapper;
 
 
-    /**
-     * 分页查询  多条件
-     * @param pageNo  当前页
-     * @param pageSize 每页显示条数
-     * @return
-     */
-    @RequestMapping(value = "/findProviderList1",method = RequestMethod.GET)
-    @ResponseBody
-    public JsonMassage<List<EquipmentFire>> findProviderList1(
-            @RequestParam(value = "pageNo",defaultValue = "1") Integer pageNo,
-            @RequestParam(value = "pageSize",defaultValue = "10") Integer pageSize,
-            String proName,
-            String proDesc
-    ){
-
-        List<EquipmentFire> list = equipmentFireService.findProviderList1(pageNo,pageSize,proName,proDesc);
-        System.out.println(list.toString());
-        Integer count = equipmentFireService.findProviderListCount1(proName,proDesc);
-        JsonMassage<List<EquipmentFire>> jsonMassage = new JsonMassage<List<EquipmentFire>>();
-        jsonMassage.setCode(200);
-        jsonMassage.setMsg("ok");
-        jsonMassage.setDataCount(count);
-        jsonMassage.setData(list);
-        return jsonMassage;
-    }
-
-
-    @RequestMapping(value = "/a")
-    public  JsonMassage<List<EquipmentFire>> all(){
-    List<EquipmentFire> list = equipmentFireService.list();
-    JsonMassage<List<EquipmentFire>> json = new JsonMassage<List<EquipmentFire>>(200,"ok",10,list);
-    return json;
-    }
+//    /**
+//     * 分页查询  多条件
+//     * @param pageNo  当前页
+//     * @param pageSize 每页显示条数
+//     * @return
+//     */
+//    @RequestMapping(value = "/findProviderList1",method = RequestMethod.GET)
+//    @ResponseBody
+//    public JsonMassage<List<EquipmentFire>> findProviderList1(
+//            @RequestParam(value = "pageNo",defaultValue = "1") Integer pageNo,
+//            @RequestParam(value = "pageSize",defaultValue = "10") Integer pageSize,
+//            String proName,
+//            String proDesc
+//    ){
+//        List<EquipmentFire> list = equipmentFireService.findProviderList1(pageNo,pageSize,proName,proDesc);
+//        System.out.println(list.toString());
+//        Integer count = equipmentFireService.findProviderListCount1(proName,proDesc);
+//        JsonMassage<List<EquipmentFire>> jsonMassage = new JsonMassage<List<EquipmentFire>>();
+//        jsonMassage.setCode(200);
+//        jsonMassage.setMsg("ok");
+//        jsonMassage.setCount(count);
+//        jsonMassage.setData(list);
+//        return jsonMassage;
+//    }
+//
+//    @RequestMapping(value = "/a")
+//    public  JsonMassage<List<EquipmentFire>> all(){
+//    List<EquipmentFire> list = equipmentFireService.list();
+//    JsonMassage<List<EquipmentFire>> json = new JsonMassage<List<EquipmentFire>>(200,"ok",10,list);
+//    return json;
+//    }
 
     //    删除数据
     @RequestMapping(value = "shanchu")
     public ResultJson shanchu(EquipmentFire equipmentFire){
         System.out.println("进入shanchu**********************");
+
         int i = equipmentFireMapper.deleteById(equipmentFire);
         ResultJson resultJson = new ResultJson(i);
         resultJson.setCode(200);
         System.out.println("受影响行数==================================================================================================="+i);
         return resultJson;
     }
-
-
 
     //    新增数据
     @RequestMapping(value = "tianjia")
@@ -94,6 +91,8 @@ public class EquipmentFireController {
     @RequestMapping(value = "/xiugai")
     public ResultJson xiugaiid(EquipmentFire equipmentFire){
         System.out.println("进入xiugai============");
+        System.out.println("equipment========================"+equipmentFire);
+        System.out.println("id============================="+equipmentFire.getEquipmentFireId());
         int i = equipmentFireMapper.updateById(equipmentFire);
         ResultJson resultJson = new ResultJson(i);
         resultJson.setCode(200);
@@ -109,13 +108,6 @@ public class EquipmentFireController {
         JsonMassage<EquipmentFire> json = new JsonMassage<EquipmentFire>(200,"ok",1,equipmentFire);
         return json;
     }
-
-
-
-
-
-
-
 
 
     @RequestMapping(value = "/chaxun")
@@ -139,9 +131,9 @@ public class EquipmentFireController {
         Page<EquipmentFire> page1 = new Page<EquipmentFire>(pageNo,pageSize);
 //        equipmentFireService.page(page1, qw);的page是一个方法叫page
         Page page2 = equipmentFireService.page(page1, qw);
-        Integer count = Math.toIntExact(page1.getTotal());
-        JsonMassage<List<EquipmentFire>>  json = new JsonMassage<List<EquipmentFire>>(200,"ok",count,page1.getRecords());
-        System.out.println("page1==========="+page1.getRecords());
+        Integer count = Math.toIntExact(page2.getTotal());
+        JsonMassage<List<EquipmentFire>>  json = new JsonMassage<List<EquipmentFire>>(200,"ok",count,page2.getRecords());
+        System.out.println("page2==========="+page2.getRecords());
         return json;
     }
 
