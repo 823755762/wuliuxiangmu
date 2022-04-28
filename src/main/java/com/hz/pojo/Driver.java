@@ -82,7 +82,7 @@ public class Driver implements Serializable {
     /**
      * 驾照到期时间
      */
-    private Date driverLicenseExpirationTime;
+    private String driverLicenseExpirationTime;
 
     /**
      * 状态（  0.休息 1.离岗 ）
@@ -99,13 +99,13 @@ public class Driver implements Serializable {
      * 创建时间
      */
     @TableField(fill = FieldFill.INSERT)
-    private Date createTime;
+    private String createTime;
 
     /**
      * 修改时间
      */
     @TableField(fill = FieldFill.INSERT_UPDATE)
-    private Date updateTime;
+    private String updateTime;
 
 
 }

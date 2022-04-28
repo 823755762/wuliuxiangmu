@@ -24,7 +24,7 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 public class EquipmentFire implements Serializable {
-
+    @TableId(value = "equipment_fire_id",type = IdType.AUTO)
     private static final long serialVersionUID=1L;
 
     /**
@@ -32,6 +32,7 @@ public class EquipmentFire implements Serializable {
      */
     @TableId(value = "equipment_fire_id", type = IdType.AUTO)
     private Long equipmentFireId;
+
 
     /**
      * 设备名称
@@ -67,14 +68,12 @@ public class EquipmentFire implements Serializable {
     /**
      * 创建时间
      */
-    @TableField(fill = FieldFill.INSERT)
-    private Date createTime;
+    private String  createTime;
 
     /**
      * 修改时间
      */
-    @TableField(fill = FieldFill.INSERT_UPDATE)
-    private Date updateTime;
+    private String updateTime;
 
 
 }
