@@ -1,16 +1,11 @@
 package com.hz.pojo;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import java.util.Date;
-import com.baomidou.mybatisplus.annotation.Version;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.TableLogic;
-import com.baomidou.mybatisplus.annotation.TableField;
-import java.io.Serializable;
+import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+
+import java.io.Serializable;
 
 /**
  * <p>
@@ -46,6 +41,8 @@ public class Vehicle implements Serializable {
     /**
      * 车辆照片
      */
+  //@TableField(typeHandler= FastjsonTypeHandler.class)
+   // @TableField(exist = false)
     private String vehicleVehiclePhoto;
 
     /**
@@ -59,7 +56,7 @@ public class Vehicle implements Serializable {
     private String vehicleNote;
 
     /**
-     * 车辆状态（0.空闲 ，3运送中  5.维修  6.报废）
+     * 车辆状态（0.空闲 ，1运送中  2.维修  3.报废）
      */
     private Integer vehicleStatus;
 
@@ -78,13 +75,13 @@ public class Vehicle implements Serializable {
      * 创建时间
      */
     @TableField(fill = FieldFill.INSERT)
-    private Date createTime;
+    private String createTime;
 
     /**
      * 修改时间
      */
     @TableField(fill = FieldFill.INSERT_UPDATE)
-    private Date updateTime;
+    private String updateTime;
 
 
 }

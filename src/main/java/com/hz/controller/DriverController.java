@@ -66,7 +66,6 @@ public class DriverController {
 
     @RequestMapping("/updatedriver")
     public JsonMassage updatedriver(Driver driver){
-        System.out.println(driver.toString());
         int i=driverMapper.updateById(driver);
         System.out.println("受影响行数+======="+i);
         JsonMassage resultJson=new JsonMassage();
@@ -94,7 +93,7 @@ public class DriverController {
 
         int i=driverMapper.deleteById(id);
         JsonMassage jsonMassage=new JsonMassage<>();
-        jsonMassage.setDataCount(1);
+        jsonMassage.setDataCount(i);
         jsonMassage.setCode(200);
         jsonMassage.setData(i);
         jsonMassage.setMsg("ok");
