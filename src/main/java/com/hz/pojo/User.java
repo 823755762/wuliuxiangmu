@@ -58,10 +58,7 @@ public class User implements Serializable {
      */
     private Long userCreationId;
 
-    /**
-     * 创建时间
-     */
-    private String userCreationTime;
+
 
     private String userRemarkColumn;
 
