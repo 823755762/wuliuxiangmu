@@ -19,7 +19,7 @@ public interface MenuService extends IService<Menu> {
      * @param userId
      * @return
      */
-     List<String> findMenuListByUserid(Long userId);
+     String findMenuListByUserid(Long userId);
      List<Menu> getClildren(String menuId);
      List<String> findMenuIdsByroleId(Long roleId);
 }

@@ -72,16 +72,24 @@ public class MenuController {
 
     @GetMapping("/menu")
     public JsonMassage getMenu(Long userId){
-        List<String> menuListByUserid = menuService.findMenuListByUserid(userId);
+//        List<String> menuListByUserid = menuService.findMenuListByUserid(userId);
+        String menuListByUserid = menuService.findMenuListByUserid(userId);
+        String[] split1 = menuListByUserid.split(",");
         List<String> menuIds=new ArrayList<>();
-        for (String string:menuListByUserid) {
+
+       /* for (String string:menuListByUserid) {
             String[] split = string.split(",");
             for (String string2 : split) {
                 menuIds.add(string2);
             }
-        }
+        }*/
+
+       for (String string:split1) {
+           menuIds.add(string);
+       }
         LinkedHashSet<String> hashSet = new LinkedHashSet<>(menuIds);
         menuIds = new ArrayList<>(hashSet);
+
         JsonMassage jsonMassage = new JsonMassage();
         jsonMassage.setCode(200);
         jsonMassage.setData(menuIds);

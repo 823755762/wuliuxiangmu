@@ -97,8 +97,10 @@ public class RoleController {
             authority.setMenuIds(ids);
             i=authorityMapper.updateById(authority);
         }
+        role.setRoleIds(ids);
+        int i1 = roleMapper.updateById(role);
         System.out.println(ids);
-        ResultJson resultJson = new ResultJson(i);
+        ResultJson resultJson = new ResultJson(i1);
         resultJson.setCode(200);
         return resultJson;
     }
