@@ -1,7 +1,7 @@
 package com.hz.service;
 
-import com.hz.pojo.Vehicle;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.hz.pojo.Vehicle;
 
 /**
  * <p>
@@ -12,5 +12,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2022-04-26
  */
 public interface VehicleService extends IService<Vehicle> {
+
 
 }
