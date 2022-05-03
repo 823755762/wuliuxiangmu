@@ -1,4 +1,4 @@
-package com.hz.pojo;
+package pojo;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import java.util.Date;
