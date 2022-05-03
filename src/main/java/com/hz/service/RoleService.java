@@ -37,4 +37,11 @@ public interface RoleService extends IService<Role> {
      * @return
      */
      int addRole(Role role);
+
+    /**
+     * 删除角色
+     * @param role
+     * @return
+     */
+     int deleteRole(Role role);
 }

@@ -59,14 +59,9 @@ public class Authority implements Serializable {
     private Integer authorityClass;
 
     /**
-     * 排序
+     * 菜单ID
      */
-    private Integer authoritySort;
-
-    /**
-     * 角色id
-     */
-    private Date roleId;
+    private String menuIds;
 
     /**
      * 逻辑删除0-->正常 1-->删除
