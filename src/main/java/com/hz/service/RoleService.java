@@ -2,6 +2,9 @@ package com.hz.service;
 
 import com.hz.pojo.Role;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.hz.utils.JsonMassage;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +16,25 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface RoleService extends IService<Role> {
 
+
+    /**
+     * 查询所有
+     * @param roleSupperAdmin
+     * @return
+     */
+    List<Role> findListRole(String roleSupperAdmin);
+
+    /**
+     * 修改角色
+     * @param role
+     * @return
+     */
+     int updateRole(Role role);
+
+    /**
+     * 添加角色
+     * @param role
+     * @return
+     */
+     int addRole(Role role);
 }
