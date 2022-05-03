@@ -13,7 +13,7 @@
     </sql>
 
 
-    <select id="findProviderList1" resultType="EquipmentFire">
+    <select id="findProviderList1" resultType="com.hz.pojo.EquipmentFire">
         select * from equipment_fire
         <include refid="provider_where"/>
         order by creationDate desc
