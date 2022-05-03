@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hz.mapper.DriverMapper;
+import com.hz.pojo.Department;
 import com.hz.pojo.Driver;
 import com.hz.utils.JsonMassage;
 import com.hz.utils.ResultJson;
@@ -40,26 +41,22 @@ public class DriverController {
             @RequestParam(value = "pageNo",defaultValue = "1") Integer pageNo,
             @RequestParam(value = "pageSize",defaultValue = "10") Integer pageSize,
             String driverName,Integer Idcard){
-        QueryWrapper<Driver> wrapper=new QueryWrapper<Driver>();
-        if(driverName!=null){
-            wrapper.like("driver_name",driverName);
+        Page<Driver> page = new Page<Driver>(pageNo, pageSize);
+        QueryWrapper<Driver> queryWrap = new QueryWrapper<>();
+        queryWrap.eq("driver_name", driverName).or().eq("driver_Idcard",Idcard);
+        if (driverName != null || Idcard != null){
+            driverMapper.selectPage(page,queryWrap);// 输出page对象分页查询信息
+        }else {
+            driverMapper.selectPage(page, null);
         }
-        if(Idcard!=null){
-            wrapper.like("driver_Idcard",Idcard);
-        }
-
-        Page<Driver> page = new Page<>(pageNo, pageSize);
-
-        Integer count=driverMapper.selectCount(wrapper);
-        IPage<Driver> iPage = driverMapper.selectPage(page,wrapper);
-        System.out.println("总页数:"+iPage.getPages());
-        System.out.println("总记录数:"+iPage.getTotal());
-        List<Driver> list=iPage.getRecords();
-        list=driverMapper.selectList(wrapper);
-        JsonMassage<List<Driver>> jsonMassage=new JsonMassage<List<Driver>>();
-        jsonMassage.setDataCount(count);
+        queryWrap.orderByDesc("driver_id");
+        Integer total = Math.toIntExact(page.getTotal());
+        List<Driver> records = page.getRecords();
+        JsonMassage<List<Driver>> jsonMassage=new JsonMassage<>();
+        System.out.println("当前页：" + page.getCurrent());
+        jsonMassage.setDataCount(total);
         jsonMassage.setMsg("ok");
-        jsonMassage.setData(list);
+        jsonMassage.setData(records);
         jsonMassage.setCode(200);
         return jsonMassage;
     }
