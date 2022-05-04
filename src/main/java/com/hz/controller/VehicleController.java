@@ -8,6 +8,7 @@ import com.hz.service.VehicleService;
 import com.hz.utils.JsonMassage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -126,5 +127,38 @@ public class VehicleController {
         JsonMassage jsonMas = new JsonMassage<>(200, "ok", null, null);
         return jsonMas;
     }
+
+    /**
+     * 新增用户
+     *
+     * @param vehicle
+     * @return
+     */
+    /*@RequestMapping(value = "/insertVehicle", method = RequestMethod.POST)*/
+    @PostMapping(value = "/insertVehicle", headers = "content-type=multipart/form-data")
+    @ResponseBody
+    public JsonMassage<String> insertVehicle(Vehicle vehicle, MultipartFile uploadFile) {
+        String s = vehicleService.picOSS(uploadFile);
+        /*String s = vehicleService.upLoad(vehicle.getVehicleVehiclePhoto(), vehicle.getVehicleCard());
+        System.out.println(s);*/
+
+        boolean save = vehicleService.save(vehicle);
+        JsonMassage<String> jsonMas = new JsonMassage<String>(200, "ok", null, null);
+        return jsonMas;
+    }
+
+    /**
+     * 查询所有信息
+     */
+
+    @RequestMapping("/vehicleList")
+    @ResponseBody
+    public JsonMassage<List<Vehicle>> vehicleList() {
+        List<Vehicle> list = vehicleService.list();
+        JsonMassage<List<Vehicle>> jsonMas = new JsonMassage<List<Vehicle>>(200, "ok", null, list);
+        return jsonMas;
+    }
+
+
 }
 

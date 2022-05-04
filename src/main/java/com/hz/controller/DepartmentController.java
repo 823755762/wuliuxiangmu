@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hz.mapper.DepartmentMapper;
 import com.hz.pojo.Department;
 import com.hz.pojo.Driver;
+import com.hz.pojo.WaybillInfo;
 import com.hz.service.DepartmentService;
 import com.hz.utils.JsonMassage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,25 +39,24 @@ public class DepartmentController {
     @ResponseBody
     public JsonMassage<List<Department>> findAll(
             @RequestParam(value = "pageNo",defaultValue = "1") Integer pageNo,
-            @RequestParam(value = "pageSize",defaultValue = "10") Integer pageSize,
+            @RequestParam(value = "pageSize",defaultValue = "5") Integer pageSize,
             String departmentName,Integer departmentId){
-        QueryWrapper<Department> wrapper=new QueryWrapper<Department>();
-        if(departmentName!=null){
-            wrapper.like("department_Name",departmentName);
+        Page<Department> page = new Page<Department>(pageNo, pageSize);
+        QueryWrapper<Department> queryWrap = new QueryWrapper<>();
+        queryWrap.eq("department_id", departmentId).or().eq("department_name",departmentName);
+        if (departmentId != null || departmentName != null){
+            departmentMapper.selectPage(page,queryWrap);// 输出page对象分页查询信息
+        }else {
+            departmentMapper.selectPage(page, null);
         }
-        if(departmentId!=null){
-            wrapper.like("department_id",departmentId);
-        }
-        Integer count=departmentMapper.selectCount(wrapper);
-        Page<Department> page = new Page<>(pageNo, pageSize);
-        IPage<Department> iPage=departmentMapper.selectPage(page,wrapper);
-        iPage.getPages();
-        iPage.getTotal();
-        List<Department> list=iPage.getRecords();
+        queryWrap.orderByDesc("department_id");
+        Integer total = Math.toIntExact(page.getTotal());
+        List<Department> records = page.getRecords();
         JsonMassage<List<Department>> jsonMassage=new JsonMassage<>();
+        System.out.println("当前页：" + page.getCurrent());
         jsonMassage.setCode(200);
-        jsonMassage.setDataCount(count);
-        jsonMassage.setData(list);
+        jsonMassage.setDataCount(total);
+        jsonMassage.setData(records);
         jsonMassage.setMsg("ok");
         return jsonMassage;
     }
