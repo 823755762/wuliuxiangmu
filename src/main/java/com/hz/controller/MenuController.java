@@ -9,7 +9,9 @@ package com.hz.controller;
 
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
+import com.hz.mapper.RoleMapper;
 import com.hz.pojo.Menu;
+import com.hz.pojo.Role;
 import com.hz.service.MenuService;
 import com.hz.utils.JsonMassage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +37,8 @@ import java.util.List;
 public class MenuController {
     @Autowired
     private MenuService menuService;
-
+@Autowired
+private RoleMapper roleMapper;
    /* @GetMapping("/menu")
     public JsonMassage getMenu(Long userId){
         List<Menu> menuListByUserid = menuService.findMenuListByUserid(userId);
@@ -89,7 +92,6 @@ public class MenuController {
        }
         LinkedHashSet<String> hashSet = new LinkedHashSet<>(menuIds);
         menuIds = new ArrayList<>(hashSet);
-
         JsonMassage jsonMassage = new JsonMassage();
         jsonMassage.setCode(200);
         jsonMassage.setData(menuIds);
@@ -97,10 +99,11 @@ public class MenuController {
     }
     @RequestMapping("/getList")
     public JsonMassage getListMenu(Long roleId){
-        List<String> menuIdsByroleId = menuService.findMenuIdsByroleId(roleId);
+        Role role = roleMapper.selectById(roleId);
+        String[] split = role.getRoleIds().split(",");
         JsonMassage jsonMassage = new JsonMassage();
         jsonMassage.setCode(200);
-        jsonMassage.setData(menuIdsByroleId);
+        jsonMassage.setData(split);
         return jsonMassage;
     }
 }

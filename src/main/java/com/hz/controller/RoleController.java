@@ -19,6 +19,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 /**
@@ -73,6 +75,7 @@ public class RoleController {
             User user = (User) obj;
             role.setRoleCreator(user.getUserName());
             role.setRoleModifier(user.getUserName());
+            role.setRoleIds("1");
         }
         int i = roleService.addRole(role);
         ResultJson resultJson = new ResultJson(i);
@@ -87,21 +90,49 @@ public class RoleController {
     }
     @RequestMapping("/updateRoleMenu")
     public ResultJson updateRoleMenu(Long roleId,String ids){
-        int i = 0;
+        int i2 = 0;
         Role role = roleMapper.selectById(roleId);
-        QueryWrapper<AuthorityRole> queryWrapper = new QueryWrapper();
-        queryWrapper.eq("role_id",roleId);
-        List<AuthorityRole> authorityRoles = authorityRoleMapper.selectList(queryWrapper);
-        for (AuthorityRole authorityRole : authorityRoles) {
-            Authority authority = authorityMapper.selectById(authorityRole.getAuthorityId());
-            authority.setMenuIds(ids);
-            i=authorityMapper.updateById(authority);
-        }
         role.setRoleIds(ids);
+        String[] split = ids.split(",");
+        //获取时间
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm:ss");
+        LocalDateTime now = LocalDateTime.now();
+        //  2022-04-27 15:46:30
+        String format = dtf.format(now);
+        ResultJson resultJson = null;
+        for (String string:split) {
+            QueryWrapper<Authority> queryWrapper = new QueryWrapper();
+            System.out.println("String:========================================"+string);
+            queryWrapper.eq("menu_ids",string);
+            Authority authority = authorityMapper.selectOne(queryWrapper);
+            System.out.println("role.getRoleId():+++++++++++++++++++++++"+role.getRoleId());
+            if (authority != null) {
+                if (i2 == 0){
+                    QueryWrapper<AuthorityRole> queryWrapper1 = new QueryWrapper();
+                    queryWrapper1.eq("role_id",role.getRoleId());
+                    i2 = authorityRoleMapper.delete(queryWrapper1);
+                    resultJson= new ResultJson(i2);
+                    resultJson.setCode(200);
+                }
+                AuthorityRole authorityRole = new AuthorityRole();
+                authorityRole.setRoleId(role.getRoleId());
+                authorityRole.setAuthorityId(authority.getAuthorityId());
+                authorityRole.setCreateTime(format);
+                authorityRole.setUpdateTime(format);
+                List<AuthorityRole> authorityRoles = authorityRoleMapper.selectList(null);
+                int insert = authorityRoleMapper.insert(authorityRole);
+                if (insert == 0) {
+                    resultJson.setCode(0);
+
+                }
+
+
+            }
+        }
         int i1 = roleMapper.updateById(role);
-        System.out.println(ids);
-        ResultJson resultJson = new ResultJson(i1);
-        resultJson.setCode(200);
+        if (i1 > 0) {
+            resultJson.setCode(200);
+        }
         return resultJson;
     }
 }

@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.lang.System;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -79,14 +80,23 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
     public List<String> findMenuIdsByroleId(Long roleId) {
         QueryWrapper<AuthorityRole> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("role_id",roleId);
-        List<AuthorityRole> authorityRoles = authorityRoleMapper.selectList(queryWrapper);
+        Role role = roleMapper.selectById(roleId);
         List<String> menuIds = new ArrayList<>();
+        String roleIds = role.getRoleIds();
+        System.out.println(roleIds);
+        String[] split = roleIds.split(",");
+        for (String str : split) {
+            menuIds.add(str);
+        }
+        /*List<AuthorityRole> authorityRoles = authorityRoleMapper.selectList(queryWrapper);
+        List<String> menuIds = new ArrayList<>()
         for (AuthorityRole authorityRole : authorityRoles) {
             QueryWrapper<Authority> queryWrapper2 = new QueryWrapper<>();
             queryWrapper2.eq("authority_id",authorityRole.getAuthorityId());
             List<Authority> authorities = authorityMapper.selectList(queryWrapper2);
             for (Authority authority : authorities) {
                 String menuIds1 = authority.getMenuIds();
+                System.out.println(menuIds1);
                 String[] split = menuIds1.split(",");
                 for (String str : split) {
                     menuIds.add(str);
@@ -94,7 +104,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
                 LinkedHashSet<String> hashSet = new LinkedHashSet<>(menuIds);
                 menuIds = new ArrayList<>(hashSet);
             }
-        }
+        }*/
         return menuIds;
     }
 

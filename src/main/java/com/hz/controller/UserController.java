@@ -99,10 +99,17 @@ public class UserController {
     @RequestMapping(value = "/insertUser", method = RequestMethod.POST)
     @ResponseBody
     public JsonMassage<String> insertUser(User user) {
+        //到redis中找对象
+        Object obj = redisUtil.getStrJson("userToken",User.class);
+        if (obj != null) {
+            User user1 = (User) obj;
+            user.setUserCreationId(user1.getUserId());
+        }
         //获取时间
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm:ss");
         LocalDateTime now = LocalDateTime.now();
-        String format = dtf.format(now);    //  2022-04-27 15:46:30
+        //  2022-04-27 15:46:30
+        String format = dtf.format(now);
         user.setCreateTime(format);
         boolean save = userService.save(user);
         JsonMassage<String> jsonMas = new JsonMassage<String>(200, "ok", null, null);
@@ -132,10 +139,17 @@ public class UserController {
     @RequestMapping(value = "/updateUserById", method = RequestMethod.POST)
     @ResponseBody
     public JsonMassage<String> upState(User user) {
+        //到redis中找对象
+        Object obj = redisUtil.getStrJson("userToken",User.class);
+        if (obj != null) {
+            User user1 = (User) obj;
+            user.setUserCreationId(user1.getUserId());
+        }
         //获取时间
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm:ss");
         LocalDateTime now = LocalDateTime.now();
-        String format = dtf.format(now);    //  2022-04-27 15:46:30
+        //  2022-04-27 15:46:30
+        String format = dtf.format(now);
         user.setUpdateTime(format);
 
         //穿对象修改用户信息

@@ -28,7 +28,15 @@ public class VehicleController {
 
     @Autowired
     private VehicleService vehicleService;
-
+    @RequestMapping("/findAllVehicle")
+    public JsonMassage<List<Vehicle>> findAllVehicle(){
+        List<Vehicle> list = vehicleService.list();
+        JsonMassage<List<Vehicle>> jsonMassage = new JsonMassage<List<Vehicle>>();
+        jsonMassage.setCode(200);
+        jsonMassage.setMsg("ok");
+        jsonMassage.setData(list);
+        return jsonMassage;
+    }
     @RequestMapping(value = "findVehicleList", method = RequestMethod.GET)
     @ResponseBody
     public JsonMassage<List<Vehicle>> findVehicleList(
@@ -137,8 +145,7 @@ public class VehicleController {
     /*@RequestMapping(value = "/insertVehicle", method = RequestMethod.POST)*/
     @PostMapping(value = "/insertVehicle", headers = "content-type=multipart/form-data")
     @ResponseBody
-    public JsonMassage<String> insertVehicle(Vehicle vehicle, MultipartFile uploadFile) {
-        String s = vehicleService.picOSS(uploadFile);
+    public JsonMassage<String> insertVehicle(Vehicle vehicle) {
         /*String s = vehicleService.upLoad(vehicle.getVehicleVehiclePhoto(), vehicle.getVehicleCard());
         System.out.println(s);*/
 
