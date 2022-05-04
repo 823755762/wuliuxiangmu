@@ -1,4 +1,4 @@
-package com.hz.pojo;
+package pojo;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import java.util.Date;
@@ -14,7 +14,7 @@ import lombok.experimental.Accessors;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author UserG
@@ -67,17 +67,17 @@ public class Employees implements Serializable {
     /**
      * 入职时间
      */
-    private Date employeesInductiontime;
+    private String employeesInductiontime;
 
     /**
      * 创建时间
      */
-    private Date employeesCreateTime;
+    private String employeesCreateTime;
 
     /**
      * 创建人ID（管理员表）
      */
-    private Long adminId;
+    private int adminId;
 
     /**
      * 状态（0在职  1离职  2休假 3禁用
@@ -98,14 +98,12 @@ public class Employees implements Serializable {
     /**
      * 创建时间
      */
-    @TableField(fill = FieldFill.INSERT)
-    private Date createTime;
+    private String createTime;
 
     /**
      * 修改时间
      */
-    @TableField(fill = FieldFill.INSERT_UPDATE)
-    private Date updateTime;
+    private String updateTime;
 
 
 }
