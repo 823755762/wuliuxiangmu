@@ -3,15 +3,18 @@ package com.hz.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.hz.mapper.AuthorityMapper;
+import com.hz.mapper.RoleMapper;
+import com.hz.pojo.Authority;
+import com.hz.pojo.Role;
 import com.hz.pojo.User;
 import com.hz.service.UserService;
 import com.hz.utils.JsonMassage;
+import com.hz.utils.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -25,12 +28,17 @@ import java.util.List;
  * @author UserG
  * @since 2022-04-26
  */
-@Controller
+@RestController
 @RequestMapping("/user")
 public class UserController {
     @Autowired
     private UserService userService;
-
+    @Autowired
+    private AuthorityMapper authorityMapper;
+    @Autowired
+    private RoleMapper roleMapper;
+    @Autowired
+    private RedisUtil redisUtil;
     /**
      * 多条件组合模糊查询+翻页
      *
@@ -41,7 +49,19 @@ public class UserController {
      * @param end_time   结束时间
      * @return
      */
-    @RequestMapping(value = "userList", method = RequestMethod.GET)
+    @PostMapping("/login")
+    public JsonMassage login(String username, String password){
+        //调用业务层
+        JsonMassage<String> login = userService.login(username, password);
+
+        return login;
+    }
+    @Bean
+    public void login(){
+        List<Authority> authorities = authorityMapper.selectList(null);
+        redisUtil.setStrJson("functions",authorities,null);
+    }
+    @RequestMapping(value = "/userList", method = RequestMethod.GET)
     @ResponseBody
     public JsonMassage<List<User>> userList(
             @RequestParam(value = "pageNo", defaultValue = "1") Integer pageNo,
@@ -65,9 +85,7 @@ public class UserController {
         queryWrap.orderByDesc("create_time");
         Page<User> page = new Page<User>(pageNo, pageSize);
         Page<User> list = userService.page(page, queryWrap);
-
         JsonMassage<List<User>> jsonMassage = new JsonMassage<List<User>>(200, "ok", Math.toIntExact(page.getTotal()), list.getRecords());
-
         return jsonMassage;
     }
 
@@ -81,10 +99,17 @@ public class UserController {
     @RequestMapping(value = "/insertUser", method = RequestMethod.POST)
     @ResponseBody
     public JsonMassage<String> insertUser(User user) {
+        //到redis中找对象
+        Object obj = redisUtil.getStrJson("userToken",User.class);
+        if (obj != null) {
+            User user1 = (User) obj;
+            user.setUserCreationId(user1.getUserId());
+        }
         //获取时间
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm:ss");
         LocalDateTime now = LocalDateTime.now();
-        String format = dtf.format(now);    //  2022-04-27 15:46:30
+        //  2022-04-27 15:46:30
+        String format = dtf.format(now);
         user.setCreateTime(format);
         boolean save = userService.save(user);
         JsonMassage<String> jsonMas = new JsonMassage<String>(200, "ok", null, null);
@@ -114,10 +139,17 @@ public class UserController {
     @RequestMapping(value = "/updateUserById", method = RequestMethod.POST)
     @ResponseBody
     public JsonMassage<String> upState(User user) {
+        //到redis中找对象
+        Object obj = redisUtil.getStrJson("userToken",User.class);
+        if (obj != null) {
+            User user1 = (User) obj;
+            user.setUserCreationId(user1.getUserId());
+        }
         //获取时间
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm:ss");
         LocalDateTime now = LocalDateTime.now();
-        String format = dtf.format(now);    //  2022-04-27 15:46:30
+        //  2022-04-27 15:46:30
+        String format = dtf.format(now);
         user.setUpdateTime(format);
 
         //穿对象修改用户信息

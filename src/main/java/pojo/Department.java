@@ -1,4 +1,4 @@
-package com.hz.pojo;
+package pojo;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import java.util.Date;
@@ -47,13 +47,11 @@ public class Department implements Serializable {
     /**
      * 创建时间
      */
-    @TableField(fill = FieldFill.INSERT)
     private String createTime;
 
     /**
      * 修改时间
      */
-    @TableField(fill = FieldFill.INSERT_UPDATE)
     private String updateTime;
 
 

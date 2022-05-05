@@ -30,7 +30,7 @@ public class EquipmentFireServiceImpl extends ServiceImpl<EquipmentFireMapper, E
     public List<EquipmentFire> findProviderList1(Integer curr_page, Integer page_size,String proName,String proDesc) {
         //计算偏移量 = (当前页-1)*每页显示条数
         Integer pyl = (curr_page-1)*page_size;
-        return equipmentFireMapper.findBillList1(pyl,page_size,proName,proDesc);
+        return equipmentFireMapper.findProviderList1(pyl,page_size,proName,proDesc);
     }
 
     @Override
