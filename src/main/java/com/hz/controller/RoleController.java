@@ -56,8 +56,7 @@ public class RoleController {
     @RequestMapping("/update")
     public ResultJson updateRole(Role role){
         //到redis中找对象
-        Object obj = redisUtil
-                .getStrJson("userToken" , User.class);
+        Object obj = redisUtil.getStrJson("userToken" , User.class);
         if (obj != null) {
             User user = (User) obj;
             role.setRoleModifier(user.getUserName());

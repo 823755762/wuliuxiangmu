@@ -4,13 +4,13 @@ package com.hz.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hz.mapper.EmployeesMapper;
+import com.hz.pojo.Employees;
 import com.hz.utils.JsonMassage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import pojo.Employees;
 
 
 import java.sql.Timestamp;
