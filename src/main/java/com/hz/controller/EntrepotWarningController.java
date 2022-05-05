@@ -69,7 +69,6 @@ public class EntrepotWarningController {
         Page<EntrepotWarning> page = new Page<EntrepotWarning>(pageNo, pageSize);
         Page<EntrepotWarning> list = entrepotWarningService.page(page, queryWrap);
         JsonMassage<List<EntrepotWarning>> jsonMassage = new JsonMassage<List<EntrepotWarning>>(200, "ok", Math.toIntExact(page.getTotal()), list.getRecords());
-
         return jsonMassage;
 
     }
@@ -79,8 +78,6 @@ public class EntrepotWarningController {
     @RequestMapping(value = "/entwarInsert",method = RequestMethod.GET)
     @ResponseBody
     public JsonMassage<String> WaybillInfoInsert(EntrepotWarning entrepotWarning){
-
-
         int insert = entrepotWarningMapper.insert(entrepotWarning);
         JsonMassage<String> jsonMassage = new JsonMassage<String>();
         if(insert != 0){
@@ -99,7 +96,6 @@ public class EntrepotWarningController {
     @RequestMapping(value = "/entwarUpd",method = RequestMethod.POST)
     @ResponseBody
     public JsonMassage<String> WaybillInfoUpd(EntrepotWarning entrepotWarning){
-
         boolean insert = entrepotWarningService.updateById(entrepotWarning);
         JsonMassage<String> jsonMassage = new JsonMassage<String>();
         if(insert){

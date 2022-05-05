@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hz.mapper.WaybillInfoMapper;
+import com.hz.pojo.EntrepotWarning;
 import com.hz.pojo.User;
 import com.hz.pojo.WaybillInfo;
 import com.hz.service.WaybillInfoService;
@@ -44,22 +45,17 @@ public class WaybillInfoController {
             Integer orderId,
             Integer driverId
     ) {
-        Page<WaybillInfo> page = new Page<WaybillInfo>(pageNo, pageSize);
         QueryWrapper<WaybillInfo> queryWrap = new QueryWrapper<>();
-        queryWrap.eq("order_id", orderId).or().eq("driver_id",driverId);
-        if (orderId != null || driverId != null){
-            waybillInfoMapper.selectPage(page,queryWrap);// 输出page对象分页查询信息
-        }else {
-            waybillInfoMapper.selectPage(page, null);
+        if (orderId != null) {
+            queryWrap.like("order_id", orderId);
         }
-        Integer total = Math.toIntExact(page.getTotal());
-        List<WaybillInfo> records = page.getRecords();
-        JsonMassage<List<WaybillInfo>> jsonMassage = new JsonMassage<List<WaybillInfo>>();
-        System.out.println("当前页：" + page.getCurrent());
-        jsonMassage.setCode(200);
-        jsonMassage.setMsg("请求成功");
-        jsonMassage.setData(records);
-        jsonMassage.setDataCount(total);
+        if (driverId != null) {
+            queryWrap.like("driver_id", driverId);
+        }
+        queryWrap.orderByDesc("create_time");
+        Page<WaybillInfo> page = new Page<WaybillInfo>(pageNo, pageSize);
+        Page<WaybillInfo> records = waybillInfoService.page(page, queryWrap);
+        JsonMassage<List<WaybillInfo>> jsonMassage = new JsonMassage<List<WaybillInfo>>(200,"请求成功",Math.toIntExact(page.getTotal()),records.getRecords());
         return jsonMassage;
     }
     /**
@@ -71,7 +67,11 @@ public class WaybillInfoController {
     ){
        int insert = waybillInfoMapper.insert(waybillInfo);
         JsonMassage<String> jsonMassage = new JsonMassage<String>();
-        jsonMassage.setCode(200);
+        if(insert != 0){
+            jsonMassage.setCode(200);
+        }else{
+            jsonMassage.setCode(201);
+        }
         jsonMassage.setMsg("请求成功");
         jsonMassage.setData(null);
         jsonMassage.setDataCount(null);
@@ -83,8 +83,14 @@ public class WaybillInfoController {
     @RequestMapping(value = "/waybillInfoUpd",method = RequestMethod.POST)
     @ResponseBody
     public JsonMassage<String> WaybillInfoUpd(WaybillInfo waybillInfo){
+
         boolean insert = waybillInfoService.updateById(waybillInfo);
         JsonMassage<String> jsonMassage = new JsonMassage<String>();
+        if(insert){
+            jsonMassage.setCode(200);
+        }else{
+            jsonMassage.setCode(201);
+        }
         jsonMassage.setCode(200);
         jsonMassage.setMsg("请求成功");
         jsonMassage.setData(null);
@@ -102,11 +108,7 @@ public class WaybillInfoController {
         queryWrapper.eq("waybill_info_id", WaybillInfo);
         //查询指定条件的数据
         WaybillInfo waybil =  waybillInfoService.getById(WaybillInfo);
-        JsonMassage<WaybillInfo> jsonMassage = new JsonMassage<WaybillInfo>();
-        jsonMassage.setCode(200);
-        jsonMassage.setMsg("请求成功");
-        jsonMassage.setData(waybil);
-        jsonMassage.setDataCount(null);
+        JsonMassage<WaybillInfo> jsonMassage = new JsonMassage<WaybillInfo>(200,"请求成功",null,waybil);
         return jsonMassage;
     }
     /**

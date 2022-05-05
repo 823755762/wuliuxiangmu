@@ -6,13 +6,11 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
 import com.hz.mapper.WarehouseMapper;
 import com.hz.pojo.Warehouse;
+import com.hz.pojo.WarehouseLocation;
 import com.hz.service.WarehouseService;
 import com.hz.utils.JsonMassage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 /**
@@ -44,33 +42,23 @@ public class WarehouseController {
             String warehouseNumber,
             Integer warehouseState
     ) {
-        Page<Warehouse> page = new Page<Warehouse>(pageNo, pageSize);
         QueryWrapper<Warehouse> queryWrap = new QueryWrapper<Warehouse>();
-        queryWrap.eq("warehouse_type", warehouseType)
-                .or().eq("warehouse_number",warehouseNumber)
-                .or().eq("warehouse_state",warehouseState);
-        if ("正常".equals(warehouseState)) {
-            warehouseState=1;
-            System.out.println("warehouseState===="+warehouseState);
-        }else if ("已满".equals(warehouseState)) {
-            warehouseState=2;
-        }else if ("维修".equals(warehouseState)) {
-            warehouseState=3;
+        if (warehouseType != null){
+            queryWrap.like("warehouse_type", warehouseType);
         }
-        if (warehouseType != null || warehouseNumber != null || warehouseState != null){
-            warehouseMapper.selectPage(page,queryWrap);// 输出page对象分页查询信息
-        }else {
-            warehouseMapper.selectPage(page, null);
+        if (warehouseNumber != null) {
+            queryWrap.like("warehouse_number", warehouseNumber);
         }
+        if (warehouseState != null) {
+            queryWrap.like("warehouse_state", warehouseState);
+        }
+        queryWrap.orderByDesc("warehouse_id");
+        Page<Warehouse> page = new Page<Warehouse>(pageNo, pageSize);
+        Page<Warehouse> list = warehouseService.page(page, queryWrap);
 
         Integer total = Math.toIntExact(page.getTotal());
         List<Warehouse> records = page.getRecords();
-        JsonMassage<List<Warehouse>> jsonMassage = new JsonMassage<List<Warehouse>>();
-        System.out.println("当前页：" + page.getCurrent());
-        jsonMassage.setCode(200);
-        jsonMassage.setMsg("请求成功");
-        jsonMassage.setData(records);
-        jsonMassage.setDataCount(total);
+        JsonMassage<List<Warehouse>> jsonMassage = new JsonMassage<List<Warehouse>>(200,"请求成功",total,records);
         return jsonMassage;
     }
     /**
@@ -79,8 +67,6 @@ public class WarehouseController {
     @RequestMapping(value = "/warehouseInsert",method = RequestMethod.GET)
     @ResponseBody
     public JsonMassage<String> WaybillInfoInsert(Warehouse warehouse){
-
-
         int insert = warehouseMapper.insert(warehouse);
         JsonMassage<String> jsonMassage = new JsonMassage<String>();
         if(insert != 0){
@@ -124,11 +110,7 @@ public class WarehouseController {
         queryWrapper.eq("warehouse_id", warehouse);
         //查询指定条件的数据
         Warehouse waybil =  warehouseService.getById(warehouse);
-        JsonMassage<Warehouse> jsonMassage = new JsonMassage<Warehouse>();
-        jsonMassage.setCode(200);
-        jsonMassage.setMsg("请求成功");
-        jsonMassage.setData(waybil);
-        jsonMassage.setDataCount(null);
+        JsonMassage<Warehouse> jsonMassage = new JsonMassage<Warehouse>(200,"请求成功",null,waybil);
         return jsonMassage;
     }
     /**
