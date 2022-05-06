@@ -9,6 +9,7 @@ import com.hz.pojo.Authority;
 import com.hz.pojo.Role;
 import com.hz.pojo.User;
 import com.hz.service.UserService;
+import com.hz.utils.AjaxLogoutSuccessHandler;
 import com.hz.utils.JsonMassage;
 import com.hz.utils.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -172,7 +173,11 @@ public class UserController {
         JsonMassage jsonMas = new JsonMassage<>(200, "ok", null, null);
         return jsonMas;
     }
-
-
+    @RequestMapping("/exit")
+    public JsonMassage exit(){
+        redisUtil.del("login:");
+        redisUtil.del("userToken");
+        return new JsonMassage(200,"ok",null,null);
+    }
 }
 

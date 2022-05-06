@@ -41,10 +41,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             user.setUserFinallyip(hostAddress);
             userMapper.updateById(user);
             redisUtil.setStrJson("login:"+token,user,null);
+            redisUtil.setStrJson("userToken",user,null);
             return  new JsonMassage(200,"登录成功",0,token);
         }else{
             //登录失败
-            return  new JsonMassage(250,"登录失败",1,null);
+            return  new JsonMassage(500,"登录失败",1,null);
         }
     }
 }

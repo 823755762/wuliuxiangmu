@@ -12,8 +12,10 @@ import cn.hutool.json.JSONObject;
 import com.hz.mapper.RoleMapper;
 import com.hz.pojo.Menu;
 import com.hz.pojo.Role;
+import com.hz.pojo.User;
 import com.hz.service.MenuService;
 import com.hz.utils.JsonMassage;
+import com.hz.utils.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,6 +37,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/menu")
 public class MenuController {
+    @Autowired
+    private RedisUtil redisUtil;
     @Autowired
     private MenuService menuService;
 @Autowired
@@ -74,27 +78,34 @@ private RoleMapper roleMapper;
 
 
     @GetMapping("/menu")
-    public JsonMassage getMenu(Long userId){
-//        List<String> menuListByUserid = menuService.findMenuListByUserid(userId);
-        String menuListByUserid = menuService.findMenuListByUserid(userId);
-        String[] split1 = menuListByUserid.split(",");
-        List<String> menuIds=new ArrayList<>();
-
-       /* for (String string:menuListByUserid) {
-            String[] split = string.split(",");
-            for (String string2 : split) {
-                menuIds.add(string2);
-            }
-        }*/
-
-       for (String string:split1) {
-           menuIds.add(string);
-       }
-        LinkedHashSet<String> hashSet = new LinkedHashSet<>(menuIds);
-        menuIds = new ArrayList<>(hashSet);
+    public JsonMassage getMenu(){
         JsonMassage jsonMassage = new JsonMassage();
-        jsonMassage.setCode(200);
-        jsonMassage.setData(menuIds);
+//        List<String> menuListByUserid = menuService.findMenuListByUserid(userId);
+        //到redis中找对象
+        Object obj = redisUtil.getStrJson("userToken",User.class);
+        User user = null;
+        if (obj != null) {
+            user = (User) obj;
+            String menuListByUserid = menuService.findMenuListByUserid(user.getUserId());
+            String[] split1 = menuListByUserid.split(",");
+            List<String> menuIds=new ArrayList<>();
+           /* for (String string:menuListByUserid) {
+                String[] split = string.split(",");
+                for (String string2 : split) {
+                    menuIds.add(string2);
+                }
+            }*/
+            for (String string:split1) {
+                menuIds.add(string);
+            }
+            LinkedHashSet<String> hashSet = new LinkedHashSet<>(menuIds);
+            menuIds = new ArrayList<>(hashSet);
+            jsonMassage.setCode(200);
+            jsonMassage.setData(menuIds);
+            return jsonMassage;
+        }else {
+            jsonMassage.setCode(401);
+        }
         return jsonMassage;
     }
     @RequestMapping("/getList")

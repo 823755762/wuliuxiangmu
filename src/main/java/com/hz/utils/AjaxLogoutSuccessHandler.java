@@ -21,7 +21,8 @@ public class AjaxLogoutSuccessHandler implements LogoutSuccessHandler {
         // 从这里拿到token 然后把这个token注销
         String token = httpServletRequest.getHeader("token");
         redisUtil.del("login:"+token);
-        JsonMassage jsonMassage = new JsonMassage(200,"请求成功",0,"模拟数据");
+        redisUtil.del("userToken");
+        JsonMassage jsonMassage = new JsonMassage(200,"ok",null,null);
         httpServletResponse.setCharacterEncoding("utf-8");
         PrintWriter out = httpServletResponse.getWriter();
         out.write(JSONObject.toJSONString(jsonMassage));

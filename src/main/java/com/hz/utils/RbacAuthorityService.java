@@ -32,7 +32,16 @@ public class RbacAuthorityService {
         if (requestURI.equals("/user/login")) {
             return true;
         }
+        if (requestURI.equals("/user/loginOut")) {
+            return true;
+        }
+        if (requestURI.equals("/user/exit")) {
+            return true;
+        }
         if (requestURI.equals("/menu/menu")) {
+            return true;
+        }
+        if (requestURI.equals("/driver/driverList")) {
             return true;
         }
         //放行OPTIONS请求

@@ -15,15 +15,14 @@ import java.io.PrintWriter;
 public class AjaxAuthenticationEntryPoint implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException, ServletException {
-
         String code = httpServletRequest.getAttribute("code").toString();
         JsonMassage Json = new JsonMassage();
         if(code.equals("1"))
         {
-            Json.setCode(1);
+            Json.setCode(401);
             Json.setMsg("未登录");
         }else if(code.equals("2")){
-            Json.setCode(2);
+            Json.setCode(403);
             Json.setMsg("权限不足");
         }else{
             Json.setCode(3);
