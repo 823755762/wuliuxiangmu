@@ -38,6 +38,9 @@ public class RbacAuthorityService {
         if (requestURI.equals("/user/exit")) {
             return true;
         }
+        if (requestURI.equals("/menu/getList")) {
+            return true;
+        }
         if (requestURI.equals("/menu/menu")) {
             return true;
         }
