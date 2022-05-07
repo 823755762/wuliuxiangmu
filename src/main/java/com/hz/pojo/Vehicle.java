@@ -74,13 +74,12 @@ public class Vehicle implements Serializable {
     /**
      * 创建时间
      */
-    @TableField(fill = FieldFill.INSERT)
     private String createTime;
 
     /**
      * 修改时间
      */
-    @TableField(fill = FieldFill.INSERT_UPDATE)
+
     private String updateTime;
 
     private  String url;

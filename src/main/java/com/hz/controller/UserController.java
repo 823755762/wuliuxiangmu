@@ -179,5 +179,14 @@ public class UserController {
         redisUtil.del("userToken");
         return new JsonMassage(200,"ok",null,null);
     }
+    /**
+     * 获取所有对象信息
+     */
+    @RequestMapping(value = "/allList")
+    public JsonMassage<List<User>> userList() {
+        List<User> list = userService.list();
+        JsonMassage<List<User>> jsonMas = new JsonMassage<List<User>>(200, "ok", null, list);
+        return jsonMas;
+    }
 }
 
