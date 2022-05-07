@@ -41,6 +41,9 @@ public class RbacAuthorityService {
         if (requestURI.equals("/menu/menu")) {
             return true;
         }
+        if (requestURI.equals("/role/list")) {
+            return true;
+        }
         if (requestURI.equals("/driver/driverList")) {
             return true;
         }
