@@ -83,5 +83,7 @@ public class Vehicle implements Serializable {
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private String updateTime;
 
+    private  String url;
+
 
 }

@@ -1,17 +1,12 @@
 package com.hz.pojo;
 
-import java.math.BigDecimal;
-import com.baomidou.mybatisplus.annotation.IdType;
-import java.util.Date;
-import com.baomidou.mybatisplus.annotation.Version;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.TableLogic;
-import com.baomidou.mybatisplus.annotation.TableField;
-import java.io.Serializable;
+import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+
+import java.io.Serializable;
+import java.math.BigDecimal;
 
 /**
  * <p>
@@ -129,7 +124,7 @@ public class Orderss implements Serializable {
     /**
      * 付款总金额
      */
-    private BigDecimal orderSpendTime;
+    private BigDecimal orderAllAmount;
 
     /**
      * 预估金额（系统自动计算）
@@ -144,22 +139,19 @@ public class Orderss implements Serializable {
     /**
      * 操作人ID（管理员ID）
      */
-    private Long adminId;
+    private Long userId;
 
-    /**
-     * 备注
-     */
-    private String orderRemarks;
+
 
     /**
      * 预计发货时间（客户预计）
      */
-    private Date orderDeliveryTime;
+    private String orderDeliveryTime;
 
     /**
      * 预计到达时间（客户预计）
      */
-    private Date orderArrivalTime;
+    private String orderArrivalTime;
 
     /**
      * 逻辑删除0-->正常 1-->删除
@@ -171,13 +163,13 @@ public class Orderss implements Serializable {
      * 创建时间
      */
     @TableField(fill = FieldFill.INSERT)
-    private Date createTime;
+    private String createTime;
 
     /**
      * 修改时间
      */
     @TableField(fill = FieldFill.INSERT_UPDATE)
-    private Date updateTime;
+    private String updateTime;
 
 
 }
