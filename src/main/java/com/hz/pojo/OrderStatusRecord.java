@@ -5,9 +5,12 @@ import java.util.Date;
 import com.baomidou.mybatisplus.annotation.Version;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  * <p>
@@ -43,7 +46,7 @@ public class OrderStatusRecord implements Serializable {
     /**
      * 时间
      */
-    private Date time;
+    private String  time;
 
     /**
      * 操作人ID

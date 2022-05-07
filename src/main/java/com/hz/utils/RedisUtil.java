@@ -29,11 +29,11 @@ public class RedisUtil {
 
     public Object getStrJson(String key,Class a){
         String j = valOpsStr.get(key);
-        if (j != null)
+        if (j != null){
             return  JSON.parseObject(j,a);
-        else
+        }else{
             return null;
-
+        }
     }
 
     //time 秒
