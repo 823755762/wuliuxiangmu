@@ -1,13 +1,10 @@
 package com.hz.controller;
 
 
-import com.baomidou.mybatisplus.core.conditions.query.Query;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hz.mapper.DriverMapper;
 import com.hz.mapper.OrderssMapper;
-import com.hz.mapper.VehicleMapper;
 import com.hz.mapper.WaybillInfoMapper;
 import com.hz.pojo.Driver;
 import com.hz.pojo.Orderss;
@@ -41,37 +38,11 @@ public class DriverController {
     private WaybillInfoMapper waybillInfoMapper;
     @Autowired
     private DriverService driverService;
-    @RequestMapping("/jiedan")
-    public JsonMassage jiedan(Long id,String type,Long driverId){
-        Driver driver = driverMapper.selectById(driverId);
-        Orderss orderss = orderssMapper.selectById(id);
-        orderss.setVehicleId(driver.getDriverAttributionId());
-        orderss.setOrderState(2);
-        JsonMassage jsonMassage = new JsonMassage();
-        int i = orderssMapper.updateById(orderss);
-        if (i > 0) {
-            jsonMassage.setCode(200);
-            jsonMassage.setDataCount(i);
-            return jsonMassage;
-        }
-        jsonMassage.setCode(500);
-        return jsonMassage;
-    }
-    @RequestMapping("/allorderss")
-    public JsonMassage allOrderss(){
-        QueryWrapper<Orderss> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("order_state",0).or().eq("order_state",1);
-        List<Orderss> ordersses = orderssMapper.selectList(queryWrapper);
-        JsonMassage jsonMassage = new JsonMassage();
-        jsonMassage.setCode(200);
-        jsonMassage.setData(ordersses);
-        jsonMassage.setMsg("true");
-        return jsonMassage;
-    }
+
     @RequestMapping("/kaoqin")
-    public JsonMassage driverKaoQin(Long id){
+    public JsonMassage driverKaoQin(Long id) {
         QueryWrapper<WaybillInfo> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("driver_id",id);
+        queryWrapper.eq("driver_id", id);
         List<WaybillInfo> waybillInfos = waybillInfoMapper.selectList(queryWrapper);
         JsonMassage jsonMassage = new JsonMassage();
         if (waybillInfos.size() > 0) {
@@ -83,8 +54,9 @@ public class DriverController {
         jsonMassage.setCode(500);
         return jsonMassage;
     }
+
     @RequestMapping("/sijidaka")
-    public JsonMassage driverWayBillInfo(String checkaddress,String searchtime,String latandlon,String latitude,String longitude,Long driverId){
+    public JsonMassage driverWayBillInfo(String checkaddress, String searchtime, String latandlon, String latitude, String longitude, Long driverId) {
         WaybillInfo waybillInfo = new WaybillInfo();
         waybillInfo.setDriverId(driverId);
         waybillInfo.setWaybillInfoSpendTime(checkaddress);
@@ -92,7 +64,7 @@ public class DriverController {
         waybillInfo.setWaybillInfoFinallyY(latitude);
         Driver driver = driverMapper.selectById(driverId);
         QueryWrapper<Orderss> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("vehicle_id",driver.getDriverAttributionId());
+        queryWrapper.eq("vehicle_id", driver.getDriverAttributionId());
         Orderss orderss = orderssMapper.selectOne(queryWrapper);
         JsonMassage jsonMassage = new JsonMassage();
         if (orderss != null) {
@@ -109,12 +81,12 @@ public class DriverController {
     }
 
     @RequestMapping("/login")
-    public JsonMassage driverLogin(String phone,String password){
+    public JsonMassage driverLogin(String phone, String password) {
         QueryWrapper<Driver> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("driver_phone",phone).eq("driver_password",password);
+        queryWrapper.eq("driver_phone", phone).eq("driver_password", password);
         Driver driver = driverMapper.selectOne(queryWrapper);
         JsonMassage jsonMassage = new JsonMassage();
-        if (driver!=null){
+        if (driver != null) {
             jsonMassage.setCode(200);
             jsonMassage.setData(driver);
             return jsonMassage;
@@ -128,26 +100,21 @@ public class DriverController {
             @RequestParam(value = "pageNo", defaultValue = "1") Integer pageNo,
             @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize,
             String driverName, Integer Idcard) {
-        QueryWrapper<Driver> wrapper = new QueryWrapper<Driver>();
-        if (driverName != null) {
-            wrapper.like("driver_name", driverName);
+        Page<Driver> page = new Page<Driver>(pageNo, pageSize);
+        QueryWrapper<Driver> queryWrap = new QueryWrapper<>();
+        queryWrap.eq("driver_name", driverName).or().eq("driver_Idcard", Idcard);
+        if (driverName != null || Idcard != null) {
+            driverMapper.selectPage(page, queryWrap);// 输出page对象分页查询信息
+        } else {
+            driverMapper.selectPage(page, null);
         }
-        if (Idcard != null) {
-            wrapper.like("driver_Idcard", Idcard);
-        }
-
-        Page<Driver> page = new Page<>(pageNo, pageSize);
-
-        Integer count = driverMapper.selectCount(wrapper);
-        IPage<Driver> iPage = driverMapper.selectPage(page, wrapper);
-        System.out.println("总页数:" + iPage.getPages());
-        System.out.println("总记录数:" + iPage.getTotal());
-        List<Driver> list = iPage.getRecords();
-        list = driverMapper.selectList(wrapper);
-        JsonMassage<List<Driver>> jsonMassage = new JsonMassage<List<Driver>>();
-        jsonMassage.setDataCount(count);
+        queryWrap.orderByDesc("driver_id");
+        Integer total = Math.toIntExact(page.getTotal());
+        List<Driver> records = page.getRecords();
+        JsonMassage<List<Driver>> jsonMassage = new JsonMassage<>();
+        jsonMassage.setDataCount(total);
         jsonMassage.setMsg("ok");
-        jsonMassage.setData(list);
+        jsonMassage.setData(records);
         jsonMassage.setCode(200);
         return jsonMassage;
     }
@@ -202,6 +169,7 @@ public class DriverController {
 
     /**
      * 查询所有
+     *
      * @return
      */
     @RequestMapping("/driverList")

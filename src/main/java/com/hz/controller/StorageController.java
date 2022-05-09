@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hz.mapper.StorageMapper;
 import com.hz.pojo.Storage;
-import com.hz.pojo.Unit;
 import com.hz.service.StorageService;
 import com.hz.utils.JsonMassage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,9 +91,9 @@ public class StorageController {
           }
 
           //删除
-          @RequestMapping("/deleteid")
+          @RequestMapping("/deleteId")
           @ResponseBody
-          public JsonMassage<Storage>  deletebyid(Integer storageId){
+          public JsonMassage<Storage>  deletebyId(String storageId){
           int i = storageMapper.deleteById(storageId);
           JsonMassage jsonMassage = new JsonMassage<>();
           jsonMassage.setData(i);

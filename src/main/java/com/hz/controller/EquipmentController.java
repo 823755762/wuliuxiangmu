@@ -17,7 +17,7 @@ import java.util.List;
 
 /**
  * <p>
- *  前端控制器
+ * 前端控制器
  * </p>
  *
  * @author UserG
@@ -36,7 +36,7 @@ public class EquipmentController {
 
     //    删除数据
     @RequestMapping(value = "shanchu")
-    public ResultJson shanchu(Equipment equipment){
+    public ResultJson shanchu(Equipment equipment) {
 
         int i = equipmentMapper.deleteById(equipment);
         ResultJson resultJson = new ResultJson(i);
@@ -45,10 +45,9 @@ public class EquipmentController {
     }
 
 
-
     //    新增数据
     @RequestMapping(value = "tianjia")
-    public ResultJson tianjia(Equipment equipment){
+    public ResultJson tianjia(Equipment equipment) {
         int i = equipmentMapper.insert(equipment);
         ResultJson resultJson = new ResultJson(i);
         resultJson.setCode(200);
@@ -57,7 +56,7 @@ public class EquipmentController {
 
     //修改单个对象
     @RequestMapping(value = "/xiugai")
-    public ResultJson xiugaiid(Equipment equipment){
+    public ResultJson xiugaiid(Equipment equipment) {
         int i = equipmentMapper.updateById(equipment);
         ResultJson resultJson = new ResultJson(i);
         resultJson.setCode(200);
@@ -66,10 +65,10 @@ public class EquipmentController {
 
     //    //查询单个对象
     @RequestMapping(value = "/chaxunid")
-    public JsonMassage<Equipment> chaxunid(Integer id){
+    public JsonMassage<Equipment> chaxunid(Integer id) {
         Equipment equipment = equipmentMapper.selectById(id);
-        System.out.println("id=========="+equipment.getEquipmentId());
-        JsonMassage<Equipment> json = new JsonMassage<Equipment>(200,"ok",1,equipment);
+        System.out.println("id==========" + equipment.getEquipmentId());
+        JsonMassage<Equipment> json = new JsonMassage<Equipment>(200, "ok", 1, equipment);
         return json;
     }
 
@@ -77,8 +76,8 @@ public class EquipmentController {
     @RequestMapping(value = "/chaxun")
     public JsonMassage<List<Equipment>> getList(
             //defaultValue=当前页  defaultValue==每页条数
-            @RequestParam(value = "pageNo",defaultValue = "1") Integer pageNo,
-            @RequestParam(value = "pageSize",defaultValue = "10") Integer pageSize,
+            @RequestParam(value = "pageNo", defaultValue = "1") Integer pageNo,
+            @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize,
             String equipmentName,
             String equipmentId
     ) {
@@ -86,31 +85,29 @@ public class EquipmentController {
         //直接调用父类的baseMapper对象方法查询并返回数据
         QueryWrapper qw = new QueryWrapper();
 //        如果equipmentFireName不是null就查询数据，是null的话默认搜索全部
-        if (equipmentName!=null){
+        if (equipmentName != null) {
             //equipment_fire_name是数据库名字
-            qw.like("equipment_name",equipmentName);
+            qw.like("equipment_name", equipmentName);
         }
-        if (equipmentId!=null){
-            qw.eq("equipment_id",equipmentId);
+        if (equipmentId != null) {
+            qw.eq("equipment_id", equipmentId);
         }
-        Page<Equipment> page1 = new Page<Equipment>(pageNo,pageSize);
+        Page<Equipment> page1 = new Page<Equipment>(pageNo, pageSize);
 //        equipmentService.page(page1, qw);的page是一个方法叫page
         Page page2 = equipmentService.page(page1, qw);
         Integer count = Math.toIntExact(page2.getTotal());
-        JsonMassage<List<Equipment>>  json = new JsonMassage<List<Equipment>>(200,"ok",count,page2.getRecords());
+        JsonMassage<List<Equipment>> json = new JsonMassage<List<Equipment>>(200, "ok", count, page2.getRecords());
         return json;
     }
 
 
+    @RequestMapping("/equipmentList")
+    public JsonMassage<List<Equipment>> equipmentList() {
+        List<Equipment> list = equipmentService.list();
 
+        JsonMassage<List<Equipment>> jsoms = new JsonMassage<List<Equipment>>(200, "ok", null, list);
+        return jsoms;
 
-
-
-
-
-
-
-
-
+    }
 }
 

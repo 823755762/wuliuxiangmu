@@ -50,6 +50,7 @@ public class MonitorCntroller {
         accessToken = getToken();
         StopPTZ stopPTZ = new StopPTZ(accessToken, deviceSerial, direction);
         BasicResponse<BaseDeviceResponse> basicResponse = stopPTZ.executeApi();
+        System.out.println(getToken());
         return basicResponse;
     }
 
