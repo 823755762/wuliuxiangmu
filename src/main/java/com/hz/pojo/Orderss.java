@@ -99,7 +99,7 @@ public class Orderss implements Serializable {
     /**
      * 状态（0.待验货 1.已入库 3.运送中 4.已到达 5.已结束）
      */
-    private Long orderState;
+    private int orderState;
 
     /**
      * 目的地标题

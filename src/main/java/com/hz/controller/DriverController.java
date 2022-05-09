@@ -41,6 +41,33 @@ public class DriverController {
     private WaybillInfoMapper waybillInfoMapper;
     @Autowired
     private DriverService driverService;
+    @RequestMapping("/jiedan")
+    public JsonMassage jiedan(Long id,String type,Long driverId){
+        Driver driver = driverMapper.selectById(driverId);
+        Orderss orderss = orderssMapper.selectById(id);
+        orderss.setVehicleId(driver.getDriverAttributionId());
+        orderss.setOrderState(2);
+        JsonMassage jsonMassage = new JsonMassage();
+        int i = orderssMapper.updateById(orderss);
+        if (i > 0) {
+            jsonMassage.setCode(200);
+            jsonMassage.setDataCount(i);
+            return jsonMassage;
+        }
+        jsonMassage.setCode(500);
+        return jsonMassage;
+    }
+    @RequestMapping("/allorderss")
+    public JsonMassage allOrderss(){
+        QueryWrapper<Orderss> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("order_state",0).or().eq("order_state",1);
+        List<Orderss> ordersses = orderssMapper.selectList(queryWrapper);
+        JsonMassage jsonMassage = new JsonMassage();
+        jsonMassage.setCode(200);
+        jsonMassage.setData(ordersses);
+        jsonMassage.setMsg("true");
+        return jsonMassage;
+    }
     @RequestMapping("/kaoqin")
     public JsonMassage driverKaoQin(Long id){
         QueryWrapper<WaybillInfo> queryWrapper = new QueryWrapper<>();
@@ -95,6 +122,7 @@ public class DriverController {
         jsonMassage.setCode(0);
         return jsonMassage;
     }
+
     @RequestMapping("/findAll")
     public JsonMassage<List<Driver>> findAll(
             @RequestParam(value = "pageNo", defaultValue = "1") Integer pageNo,

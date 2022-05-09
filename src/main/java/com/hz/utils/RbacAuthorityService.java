@@ -38,6 +38,12 @@ public class RbacAuthorityService {
         if (requestURI.equals("/driver/sijidaka")) {
             return true;
         }
+        if (requestURI.equals("/driver/jiedan")) {
+            return true;
+        }
+        if (requestURI.equals("/driver/allorderss")) {
+            return true;
+        }
         if (requestURI.equals("/driver/kaoqin")) {
             return true;
         }
