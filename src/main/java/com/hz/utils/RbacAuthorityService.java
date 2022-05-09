@@ -32,6 +32,15 @@ public class RbacAuthorityService {
         if (requestURI.equals("/user/login")) {
             return true;
         }
+        if (requestURI.equals("/driver/login")) {
+            return true;
+        }
+        if (requestURI.equals("/driver/sijidaka")) {
+            return true;
+        }
+        if (requestURI.equals("/driver/kaoqin")) {
+            return true;
+        }
         if (requestURI.equals("/user/loginOut")) {
             return true;
         }
