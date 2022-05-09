@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.hz.mapper.AuthorityRoleMapper;
 import com.hz.pojo.Authority;
 import com.hz.pojo.AuthorityRole;
-import com.hz.pojo.Role;
 import com.hz.pojo.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;

@@ -8,6 +8,19 @@
         <version>2.5.5</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
+    <url>http://maven.apache.org</url>
+    <repositories>
+    <repository>
+        <id>aliyunmaven</id>
+        <name>aliyun maven</name>
+        <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+    </repository>
+    <repository>
+        <id>aliyunmavensnapshot</id>
+        <name>aliyun maven snapshot</name>
+        <url>http://maven.aliyun.com/nexus/content/repositories/snapshots</url>
+    </repository>
+    </repositories>
     <groupId>com.hz</groupId>
     <artifactId>wuliuxiangmu</artifactId>
     <version>0.0.1-SNAPSHOT</version>
@@ -21,6 +34,37 @@
             <groupId>com.aliyun.oss</groupId>
             <artifactId>aliyun-sdk-oss</artifactId>
             <version>3.8.0</version>
+        </dependency>
+        <!-- amqp 1.0 qpid client -->
+        <dependency>
+            <groupId>org.apache.qpid</groupId>
+            <artifactId>qpid-jms-client</artifactId>
+            <version>0.56.0</version>
+        </dependency>
+        <!-- util for base64-->
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+            <version>1.10</version>
+        </dependency>
+        <!-- ================================================= -->
+        <!-- 日志及相关依赖（用slf4j+logback） -->
+        <!-- ================================================= -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.5</version>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.2.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>RELEASE</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -53,6 +97,11 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpmime</artifactId>
+            <version>4.5.4</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -94,6 +143,15 @@
             <version>2.8.4</version>
         </dependency>
     </dependencies>
+    <!--<distributionManagement>
+        <repository>
+            &lt;!&ndash; nexus服务器中用户名：在settings.xml中<server>的id&ndash;&gt;
+            <id>farm</id>
+            <name>fluorite-api</name>
+            <url>http://192.168.1.56:8086/repository/farm/</url>
+            <uniqueVersion>true</uniqueVersion>
+        </repository>
+    </distributionManagement>-->
 
     <build>
         <plugins>
