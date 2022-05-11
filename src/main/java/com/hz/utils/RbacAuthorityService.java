@@ -31,16 +31,25 @@ public class RbacAuthorityService {
         if (requestURI.equals("/user/login")) {
             return true;
         }
+        if (requestURI.equals("/driver/findOrderss")) {
+            return true;
+        }
+        if (requestURI.equals("/driver/getgoods")) {
+            return true;
+        }
+        if (requestURI.equals("/driver/findGoods")) {
+            return true;
+        }
         if (requestURI.equals("/driver/login")) {
             return true;
         }
         if (requestURI.equals("/driver/sijidaka")) {
             return true;
         }
-        if (requestURI.equals("/driver/jiedan")) {
+        if (requestURI.equals("/driver/tihuo")) {
             return true;
         }
-        if (requestURI.equals("/driver/allorderss")) {
+        if (requestURI.equals("/driver/diverallorders")) {
             return true;
         }
         if (requestURI.equals("/driver/kaoqin")) {

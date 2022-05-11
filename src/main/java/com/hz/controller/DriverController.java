@@ -3,20 +3,21 @@ package com.hz.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.hz.mapper.DriverMapper;
-import com.hz.mapper.OrderssMapper;
-import com.hz.mapper.WaybillInfoMapper;
-import com.hz.pojo.Driver;
-import com.hz.pojo.Orderss;
-import com.hz.pojo.WaybillInfo;
+import com.hz.mapper.*;
+import com.hz.pojo.*;
 import com.hz.service.DriverService;
 import com.hz.utils.JsonMassage;
+import jdk.nashorn.internal.runtime.linker.JavaAdapterFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import sun.rmi.runtime.Log;
 
+import java.lang.System;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 /**
@@ -31,6 +32,10 @@ import java.util.List;
 @RequestMapping("/driver")
 public class DriverController {
     @Autowired
+    private OrderStatusRecordMapper orderStatusRecordMapper;
+    @Autowired
+    private GoodsMapper goodsMapper;
+    @Autowired
     private OrderssMapper orderssMapper;
     @Autowired
     private DriverMapper driverMapper;
@@ -38,11 +43,105 @@ public class DriverController {
     private WaybillInfoMapper waybillInfoMapper;
     @Autowired
     private DriverService driverService;
+    @RequestMapping("/findGoods")
+    public JsonMassage findGoods(Long id){
+        JsonMassage jsonMassage = new JsonMassage();
+        QueryWrapper<Goods> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("order_id",id);
+        Goods goods = goodsMapper.selectOne(queryWrapper);
+        if (goods == null) {
+            jsonMassage.setCode(500);
+            return jsonMassage;
+        }
+        jsonMassage.setCode(200);
+        jsonMassage.setData(goods);
+        return jsonMassage;
+    }
+    @RequestMapping("/findOrderss")
+    public JsonMassage findOrderss(Long id){
+        JsonMassage jsonMassage = new JsonMassage();
+        Orderss orderss = orderssMapper.selectById(id);
+        if (orderss == null) {
+            jsonMassage.setCode(500);
+            return jsonMassage;
+        }
+        jsonMassage.setData(orderss);
+        jsonMassage.setCode(200);
+        return jsonMassage;
+    }
+    @RequestMapping("/tihuo")
+    public JsonMassage tihuo(Long id,Long driverId,int type){
+        JsonMassage jsonMassage = new JsonMassage();
+        OrderStatusRecord orderStatusRecord = new OrderStatusRecord();
+        Orderss orderss = orderssMapper.selectById(id);
+        if (orderss == null) {
+            jsonMassage.setCode(500);
+            return jsonMassage;
+        }
+        Driver driver = driverMapper.selectById(driverId);
+        if (driver == null) {
+            jsonMassage.setCode(500);
+            return jsonMassage;
+        }
+        if(type==0){
+            orderss.setOrderState(2);
+            orderss.setVehicleId(driver.getDriverAttributionId());
+            orderStatusRecord.setStatusDescription("运输中");
+        }
+        if (type == 2) {
+            orderss.setOrderState(3);
+            orderStatusRecord.setStatusDescription("待付尾款");
+        }
+        int i = orderssMapper.updateById(orderss);
+        if (i != 0) {
+            orderStatusRecord.setOrderId(id);
+            //获取时间
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm:ss");
+            LocalDateTime now = LocalDateTime.now();
+            //  2022-04-27 15:46:30
+            String format = dtf.format(now);
+            orderStatusRecord.setTime(format);
+            int insert = orderStatusRecordMapper.insert(orderStatusRecord);
+            if(insert > 0){
+                jsonMassage.setCode(200);
+            }
+        }
+        return jsonMassage;
+    }
+    @RequestMapping("/getgoods")
+    public JsonMassage getGoods(Long id){
+        JsonMassage jsonMassage = new JsonMassage();
+        Orderss orderss = orderssMapper.selectById(id);
+        if (orderss!=null){
+            jsonMassage.setCode(200);
+            jsonMassage.setData(orderss);
+            return jsonMassage;
+        }
+        return jsonMassage;
+    }
 
+    @RequestMapping("/diverallorders")
+    public JsonMassage diverAllOrders(Long driverId){
+        Driver driver = driverMapper.selectById(driverId);
+        QueryWrapper<Orderss> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("vehicle_id",driver.getDriverAttributionId())
+        .eq("order_state",0).or().eq("vehicle_id",driver.getDriverAttributionId()).eq("order_state",1).or();
+        queryWrapper.eq("vehicle_id",driver.getDriverAttributionId()).eq("order_state",2);
+        List<Orderss> ordersses = orderssMapper.selectList(queryWrapper);
+        JsonMassage jsonMassage = new JsonMassage();
+        if (ordersses.size() > 0) {
+            jsonMassage.setData(ordersses);
+            jsonMassage.setCode(200);
+            jsonMassage.setMsg("ok");
+            return jsonMassage;
+        }
+        jsonMassage.setCode(500);
+        return jsonMassage;
+    }
     @RequestMapping("/kaoqin")
     public JsonMassage driverKaoQin(Long id) {
         QueryWrapper<WaybillInfo> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("driver_id", id);
+        queryWrapper.eq("driver_id", id).orderByDesc("create_time");
         List<WaybillInfo> waybillInfos = waybillInfoMapper.selectList(queryWrapper);
         JsonMassage jsonMassage = new JsonMassage();
         if (waybillInfos.size() > 0) {
@@ -64,17 +163,20 @@ public class DriverController {
         waybillInfo.setWaybillInfoFinallyY(latitude);
         Driver driver = driverMapper.selectById(driverId);
         QueryWrapper<Orderss> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("vehicle_id", driver.getDriverAttributionId());
-        Orderss orderss = orderssMapper.selectOne(queryWrapper);
+        queryWrapper.eq("vehicle_id", driver.getDriverAttributionId()).eq("order_state",2);
+        List<Orderss> ordersses = orderssMapper.selectList(queryWrapper);
         JsonMassage jsonMassage = new JsonMassage();
-        if (orderss != null) {
-            System.out.println(orderss.getOrderId());
-            waybillInfo.setOrderId(orderss.getOrderId());
-            int insert = waybillInfoMapper.insert(waybillInfo);
-            if (insert == 1) {
-                jsonMassage.setCode(200);
-                return jsonMassage;
+        int insert = 0;
+        if (ordersses != null) {
+            System.out.println("orderssesSize==============="+ordersses.size());
+            for(Orderss orderss:ordersses){
+                waybillInfo.setOrderId(orderss.getOrderId());
+                insert = waybillInfoMapper.insert(waybillInfo);
             }
+        }
+        if (insert == 1) {
+            jsonMassage.setCode(200);
+            return jsonMassage;
         }
         jsonMassage.setCode(500);
         return jsonMassage;
