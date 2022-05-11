@@ -47,9 +47,9 @@ public class EntrepotWarning implements Serializable {
     private String entrepotWarningDescribe;
 
     /**
-     * 处理人员工ID
+     * 处理人员工名字
      */
-    private Long employeesId;
+    private String employeesName;
 
     /**
      * 预警时间

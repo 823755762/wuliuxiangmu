@@ -39,7 +39,7 @@ public class WarehouseController {
             @RequestParam(value = "pageNo",defaultValue = "1") Integer pageNo,
             @RequestParam(value="pageSize",defaultValue = "10") Integer pageSize,
             Integer warehouseType,
-            String warehouseNumber,
+            Integer warehouseNumber,
             Integer warehouseState
     ) {
         QueryWrapper<Warehouse> queryWrap = new QueryWrapper<Warehouse>();
@@ -67,6 +67,7 @@ public class WarehouseController {
     @RequestMapping(value = "/warehouseInsert",method = RequestMethod.GET)
     @ResponseBody
     public JsonMassage<String> WaybillInfoInsert(Warehouse warehouse){
+
         int insert = warehouseMapper.insert(warehouse);
         JsonMassage<String> jsonMassage = new JsonMassage<String>();
         if(insert != 0){
@@ -105,11 +106,13 @@ public class WarehouseController {
     @RequestMapping(value = "/warehouseById",method = RequestMethod.GET)
     @ResponseBody
     public JsonMassage<Warehouse> WaybillInfoById(Warehouse warehouse){
+
         //添加条件
         QueryWrapper<Warehouse> queryWrapper = new QueryWrapper<Warehouse>();
         queryWrapper.eq("warehouse_id", warehouse);
         //查询指定条件的数据
         Warehouse waybil =  warehouseService.getById(warehouse);
+
         JsonMassage<Warehouse> jsonMassage = new JsonMassage<Warehouse>(200,"请求成功",null,waybil);
         return jsonMassage;
     }

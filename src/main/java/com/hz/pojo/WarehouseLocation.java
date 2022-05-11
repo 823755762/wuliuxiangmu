@@ -37,14 +37,14 @@ public class WarehouseLocation implements Serializable {
     private Long warehouseLocationId;
 
     /**
-     * 所属仓库ID
+     * 所属仓库编号
      */
-    private Long warehouseId;
+    private Integer warehouseId;
 
     /**
      * 位置编号（A，B，C）
      */
-    private String warehouseLocationNumber;
+    private Integer warehouseLocationNumber;
 
     /**
      * 位置容量（平米）

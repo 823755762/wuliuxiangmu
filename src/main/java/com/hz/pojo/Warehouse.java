@@ -54,7 +54,7 @@ public class Warehouse implements Serializable {
     /**
      * 仓库编号（A，B，C）
      */
-    private String warehouseNumber;
+    private Integer warehouseNumber;
 
     /**
      * 仓库高度

@@ -40,15 +40,15 @@ public class WarehouseLocationController {
     public JsonMassage<List<WarehouseLocation>> selectPageList(
             @RequestParam(value = "pageNo",defaultValue = "1") Integer pageNo,
             @RequestParam(value="pageSize",defaultValue = "10") Integer pageSize,
-            Integer WarehouseId,
-            String warehouseLocationNumber,
+            Integer warehouseId,
+            Integer warehouseLocationNumber,
             Integer warehouseLocationState
 
     ) {
 
         QueryWrapper<WarehouseLocation> queryWrap = new QueryWrapper<WarehouseLocation>();
-        if (WarehouseId != null){
-            queryWrap.like("warehouse_id", WarehouseId);
+        if (warehouseId != null){
+            queryWrap.like("warehouse_id", warehouseId);
         }
         if (warehouseLocationNumber != null) {
             queryWrap.like("warehouse_location_number", warehouseLocationNumber);

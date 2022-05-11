@@ -5,10 +5,11 @@ import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.hz.mapper.DriverMapper;
+import com.hz.mapper.OrderssMapper;
 import com.hz.mapper.WaybillInfoMapper;
-import com.hz.pojo.EntrepotWarning;
-import com.hz.pojo.User;
-import com.hz.pojo.WaybillInfo;
+import com.hz.pojo.*;
+import com.hz.service.DriverService;
 import com.hz.service.WaybillInfoService;
 import com.hz.service.impl.WaybillInfoServiceImpl;
 import com.hz.utils.JsonMassage;
@@ -16,6 +17,7 @@ import jdk.nashorn.internal.ir.IdentNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.lang.System;
 import java.util.List;
 
 /**
@@ -33,6 +35,10 @@ public class WaybillInfoController {
     private WaybillInfoMapper waybillInfoMapper;
     @Autowired
     private WaybillInfoServiceImpl waybillInfoService;
+    @Autowired
+    private DriverMapper driverMapper;
+    @Autowired
+    private OrderssMapper orderssMapper;
     /**
      * VUE 调用 分页查询  多条件
      * @return
@@ -42,15 +48,28 @@ public class WaybillInfoController {
     public JsonMassage<List<WaybillInfo>> selectPageList(
             @RequestParam(value = "pageNo",defaultValue = "1") Integer pageNo,
             @RequestParam(value="pageSize",defaultValue = "10") Integer pageSize,
-            Integer orderId,
-            Integer driverId
+            String driverName, Orderss orderss
     ) {
         QueryWrapper<WaybillInfo> queryWrap = new QueryWrapper<>();
-        if (orderId != null) {
-            queryWrap.like("order_id", orderId);
+
+        if (driverName != null) {
+            QueryWrapper<Driver> wrap = new QueryWrapper<>();
+            wrap.like("driver_name", driverName);
+            List<Driver> drivers = driverMapper.selectList(wrap);
+            for (Driver driver : drivers) {
+                Long driverId = driver.getDriverId();
+                queryWrap.eq("driver_id", driverId);
+            }
         }
-        if (driverId != null) {
-            queryWrap.like("driver_id", driverId);
+
+        if (orderss.getWaybillId() != null) {
+            QueryWrapper<Orderss> wrap = new QueryWrapper<Orderss>();
+            wrap.like("waybill_id", orderss.getWaybillId());
+            List<Orderss> orders = orderssMapper.selectList(wrap);
+            for (Orderss order : orders) {
+                Long orderId = order.getOrderId();
+                queryWrap.eq("order_id", orderId);
+            }
         }
         queryWrap.orderByDesc("create_time");
         Page<WaybillInfo> page = new Page<WaybillInfo>(pageNo, pageSize);
