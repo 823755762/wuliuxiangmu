@@ -48,10 +48,5 @@ public class OrderStatusRecord implements Serializable {
      */
     private String  time;
 
-    /**
-     * 操作人ID
-     */
-    private Long userId;
-
 
 }

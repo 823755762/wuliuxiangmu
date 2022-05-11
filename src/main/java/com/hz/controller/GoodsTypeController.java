@@ -4,14 +4,11 @@ package com.hz.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hz.mapper.GoodsTypeMapper;
-import com.hz.pojo.Goods;
 import com.hz.pojo.GoodsType;
-import com.hz.pojo.User;
 import com.hz.service.GoodsTypeService;
 import com.hz.utils.JsonMassage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
-
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -134,6 +131,12 @@ public class GoodsTypeController {
         jsonMassage.setData(i);
         jsonMassage.setDataCount(1);
 
+        return jsonMassage;
+    }
+    @RequestMapping("/goodsTypeAll")
+    public  JsonMassage<List<GoodsType>> goodsTypeAll() {
+        List<GoodsType> list = goodsTypeService.list();
+        JsonMassage<List<GoodsType>> jsonMassage = new JsonMassage<List<GoodsType>>(200,"ok",null,list);
         return jsonMassage;
     }
 }

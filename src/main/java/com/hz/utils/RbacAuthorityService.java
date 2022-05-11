@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.hz.mapper.AuthorityRoleMapper;
 import com.hz.pojo.Authority;
 import com.hz.pojo.AuthorityRole;
-import com.hz.pojo.Role;
 import com.hz.pojo.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -32,10 +31,37 @@ public class RbacAuthorityService {
         if (requestURI.equals("/user/login")) {
             return true;
         }
+        if (requestURI.equals("/driver/findOrderss")) {
+            return true;
+        }
+        if (requestURI.equals("/driver/getgoods")) {
+            return true;
+        }
+        if (requestURI.equals("/driver/findGoods")) {
+            return true;
+        }
+        if (requestURI.equals("/driver/login")) {
+            return true;
+        }
+        if (requestURI.equals("/driver/sijidaka")) {
+            return true;
+        }
+        if (requestURI.equals("/driver/tihuo")) {
+            return true;
+        }
+        if (requestURI.equals("/driver/diverallorders")) {
+            return true;
+        }
+        if (requestURI.equals("/driver/kaoqin")) {
+            return true;
+        }
         if (requestURI.equals("/user/loginOut")) {
             return true;
         }
         if (requestURI.equals("/user/exit")) {
+            return true;
+        }
+        if (requestURI.equals("/menu/getList")) {
             return true;
         }
         if (requestURI.equals("/menu/menu")) {

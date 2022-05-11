@@ -134,5 +134,15 @@ public class UnitController {
         return  jsonMassage;
 
     }
+
+
+    @RequestMapping("/unitAll")
+    public JsonMassage<List<Unit>> unitAll(){
+        List<Unit> list = unitService.list();
+        JsonMassage<List<Unit>> jsonMassage = new JsonMassage<List<Unit>>(200,"ok",null,list);
+        return jsonMassage;
+    }
+
+
 }
 

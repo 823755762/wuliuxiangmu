@@ -1,19 +1,14 @@
 package com.hz.pojo;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import java.util.Date;
-import com.baomidou.mybatisplus.annotation.Version;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.TableLogic;
-import com.baomidou.mybatisplus.annotation.TableField;
-import java.io.Serializable;
-
+import com.baomidou.mybatisplus.annotation.*;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import org.springframework.format.annotation.DateTimeFormat;
+
+import java.io.Serializable;
+import java.util.Date;
 
 /**
  * <p>
@@ -39,7 +34,7 @@ public class Equipment implements Serializable {
     /**
      * 设备编号
      */
-    private Long equipmentSerial;
+    private String equipmentSerial;
 
     /**
      * 设备名称
@@ -80,6 +75,8 @@ public class Equipment implements Serializable {
      * 备注
      */
     private String equipmentRemarks;
+
+    private String contractPicture;
 
     /**
      * 逻辑删除0-->正常 1-->删除 ==

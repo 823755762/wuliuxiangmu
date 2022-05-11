@@ -85,9 +85,6 @@ public class OrderssController {
     ) {
 
 
-
-
-
         //生成订单编号    18位   2022 0505 1520 55xx xx
         String waybillId = "";
         //获取时间戳+4位随机数
@@ -168,14 +165,20 @@ public class OrderssController {
 
 
     @RequestMapping("/updateById")
-    public JsonMassage<Orderss> updateById(Orderss orderss){
+    public JsonMassage<Orderss> updateById(Orderss orderss) {
         boolean updateById = orderssService.updateById(orderss);
-        JsonMassage<Orderss> jsonMassage = new JsonMassage<Orderss>(200,"ok",null,null);
+        JsonMassage<Orderss> jsonMassage = new JsonMassage<Orderss>(200, "ok", null, null);
         return jsonMassage;
 
 
     }
 
+    @RequestMapping("orderssAll")
+    public JsonMassage<List<Orderss>> orderssList() {
+        List<Orderss> list = orderssService.list();
+        JsonMassage<List<Orderss>> jsonMas = new JsonMassage<List<Orderss>>(200, "ok", null, list);
+        return jsonMas;
+    }
 
 }
 

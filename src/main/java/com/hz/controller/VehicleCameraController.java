@@ -5,21 +5,20 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hz.mapper.VehicleCameraMapper;
 import com.hz.mapper.VehicleMapper;
-import com.hz.pojo.User;
 import com.hz.pojo.Vehicle;
 import com.hz.pojo.VehicleCamera;
+import com.hz.service.VehicleCameraService;
 import com.hz.utils.JsonMassage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.print.attribute.standard.QueuedJobCount;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 /**
  * <p>
- *  前端控制器
+ * 前端控制器
  * </p>
  *
  * @author UserG
@@ -32,26 +31,30 @@ public class VehicleCameraController {
     private VehicleMapper vehicleMapper;
     @Autowired
     private VehicleCameraMapper vehicleCameraMapper;
+
+    @Autowired
+    private VehicleCameraService vehicleCameraService;
+
     @RequestMapping("/vehicleCameraList")
     public JsonMassage<List<VehicleCamera>> VehicleCameraList(
             @RequestParam(value = "pageNo", defaultValue = "1") Integer pageNo,
             @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize,
             String vehicleCard,
             String start_time,
-            String end_time){
+            String end_time) {
         QueryWrapper<Vehicle> queryWrapper = new QueryWrapper<>();
         if ("" != vehicleCard && vehicleCard != null) {
             queryWrapper.like("vehicle_card", vehicleCard);
-            System.out.println("vehicleCard:=========================="+vehicleCard);
+            System.out.println("vehicleCard:==========================" + vehicleCard);
         }
         List<Vehicle> vehicles = vehicleMapper.selectList(queryWrapper);
         QueryWrapper<VehicleCamera> queryWrap = new QueryWrapper<VehicleCamera>();
         for (Vehicle vehicle : vehicles) {
-            queryWrap.or().eq("vehicle_id",vehicle.getVehicleId());
+            queryWrap.or().eq("vehicle_id", vehicle.getVehicleId());
         }
 
         for (Vehicle vehicle : vehicles) {
-            if (vehicle!=null) {
+            if (vehicle != null) {
                 queryWrap.eq("vehicle_id", vehicle.getVehicleId()).or().eq("vehicle_id", vehicle.getVehicleId());
             }
         }
@@ -68,6 +71,7 @@ public class VehicleCameraController {
         JsonMassage<List<VehicleCamera>> jsonMassage = new JsonMassage<List<VehicleCamera>>(200, "ok", Math.toIntExact(page.getTotal()), list.getRecords());
         return jsonMassage;
     }
+
     @RequestMapping(value = "/selectVehicleCameraById", method = RequestMethod.POST)
     @ResponseBody
     public JsonMassage<VehicleCamera> selectVehicleCameraById(Integer vehicleCameraId) {
@@ -75,6 +79,7 @@ public class VehicleCameraController {
         JsonMassage<VehicleCamera> jsonMas = new JsonMassage<VehicleCamera>(200, "查询成功", null, vehicleCamera);
         return jsonMas;
     }
+
     @RequestMapping(value = "/updateVehicleCameraById", method = RequestMethod.POST)
     @ResponseBody
     public JsonMassage<String> upState(VehicleCamera vehicleCamera) {
@@ -88,6 +93,7 @@ public class VehicleCameraController {
         JsonMassage<String> jsonMas = new JsonMassage<String>(200, "ok", i, null);
         return jsonMas;
     }
+
     @RequestMapping(value = "/insertVehicleCamera", method = RequestMethod.POST)
     @ResponseBody
     public JsonMassage<String> insertVehicleCamera(VehicleCamera vehicleCamera) {
@@ -102,12 +108,20 @@ public class VehicleCameraController {
         JsonMassage<String> jsonMas = new JsonMassage<String>(200, "ok", i, null);
         return jsonMas;
     }
+
     @RequestMapping(value = "/deleteVehicleCameraId", method = RequestMethod.POST)
     @ResponseBody
     public JsonMassage deleteVehicleCameraId(Integer vehicleCameraId) {
         int i = vehicleCameraMapper.deleteById(vehicleCameraId);
         JsonMassage jsonMas = new JsonMassage<>(200, "ok", i, null);
         return jsonMas;
+    }
+
+    @RequestMapping("/all")
+    public JsonMassage<List<VehicleCamera>> all() {
+        List<VehicleCamera> list = vehicleCameraService.list();
+        JsonMassage<List<VehicleCamera>> json = new JsonMassage<List<VehicleCamera>>(200, "ok", null, list);
+        return json;
     }
 }
 

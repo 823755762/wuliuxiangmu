@@ -6,15 +6,12 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hz.mapper.AuthorityMapper;
 import com.hz.mapper.RoleMapper;
 import com.hz.pojo.Authority;
-import com.hz.pojo.Role;
 import com.hz.pojo.User;
 import com.hz.service.UserService;
-import com.hz.utils.AjaxLogoutSuccessHandler;
 import com.hz.utils.JsonMassage;
 import com.hz.utils.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -40,16 +37,7 @@ public class UserController {
     private RoleMapper roleMapper;
     @Autowired
     private RedisUtil redisUtil;
-    /**
-     * 多条件组合模糊查询+翻页
-     *
-     * @param pageNo     当前页
-     * @param pageSize   每页显示的行数
-     * @param userName   根据名字模糊查询
-     * @param start_time 开始时间
-     * @param end_time   结束时间
-     * @return
-     */
+
     @PostMapping("/login")
     public JsonMassage login(String username, String password){
         //调用业务层
