@@ -161,7 +161,29 @@ public class VehicleController {
         JsonMassage<List<Vehicle>> jsonMas = new JsonMassage<List<Vehicle>>(200, "ok", null, list);
         return jsonMas;
     }
+    //查询车辆状态为空闲的车辆
 
+    @RequestMapping("/IdleVehicleList")
+    public JsonMassage<List<Vehicle>> IdleVehicleList(
+            @RequestParam(value = "pageNo", defaultValue = "1") Integer pageNo,
+            @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize,
+            Integer vehicleTypeId
+    ) {
+
+        QueryWrapper<Vehicle> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("vehicle_status", "1");
+        if(vehicleTypeId !=null){
+            queryWrapper.eq("vehicle_type_id",vehicleTypeId);
+        }
+
+
+        Page page = new Page(pageNo, pageSize);
+        Page page1 = vehicleService.page(page, queryWrapper);
+
+        JsonMassage<List<Vehicle>> jsonMas = new JsonMassage<List<Vehicle>>(200, "ok", (int) page.getTotal(), page1.getRecords());
+        return jsonMas;
+
+    }
 
 }
 

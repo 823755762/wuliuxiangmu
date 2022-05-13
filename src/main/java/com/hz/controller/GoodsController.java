@@ -60,7 +60,7 @@ public class GoodsController {
         if (goodsNumber != null) {
             queryWrapper.like("goods_Number", goodsNumber);
         }
-
+        queryWrapper.orderByDesc("create_time");
         Page<Goods> page = new Page<>(pageNo, pageSize);
 
         Page<Goods> page1 = goodsService.page(page, queryWrapper);

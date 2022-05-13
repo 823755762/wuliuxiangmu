@@ -1,6 +1,8 @@
 package com.hz.utils;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -14,9 +16,14 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.springframework.stereotype.Component;
 
-import java.awt.geom.Point2D;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.math.BigDecimal;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -112,26 +119,109 @@ public class LocationUtils {
         return null;
     }
 
-    private  final double EARTH_RADIUS = 6371393; // 地球平均半径,单位：m
     /**
-     * 通过AB点经纬度获取距离
+     * 调用百度地图地理编码服务接口，根据地址获取坐标（经度、纬度）
      *
-     * @param pointA A点(经，纬)
-     * @param pointB B点(经，纬)
-     * @return 距离(单位：米)
+     * @param address
+     * @return
      */
-    public  double getDistance(Point2D pointA, Point2D pointB) {
-        // 经纬度（角度）转弧度。弧度用作参数，以调用Math.cos和Math.sin
-        double radiansAX = Math.toRadians(pointA.getX()); // A经弧度
-        double radiansAY = Math.toRadians(pointA.getY()); // A纬弧度
-        double radiansBX = Math.toRadians(pointB.getX()); // B经弧度
-        double radiansBY = Math.toRadians(pointB.getY()); // B纬弧度
+    public  String getCoord(String address) {
+        String httpUrl = "http://api.map.baidu.com/geocoding/v3/?address=" + address + "&output=json&ak=" + AK;
+        String json = loadJSON(httpUrl);
+        Map map = JSON.parseObject(json, Map.class);
 
-        // cosβ1cosβ2cos（α1-α2）+sinβ1sinβ2
-        double cos = Math.cos(radiansAY) * Math.cos(radiansBY) * Math.cos(radiansAX - radiansBX)
-                + Math.sin(radiansAY) * Math.sin(radiansBY);
-        double acos = Math.acos(cos); // 反余弦值
-        return EARTH_RADIUS * acos; // 最终结果
+        String status = map.get("status").toString();
+        if (status.equals("0")) {
+            //返回结果成功，能够正常解析地址信息
+            Map result = (Map) map.get("result");
+            Map location = (Map) result.get("location");
+            String lng = location.get("lng").toString();
+            String lat = location.get("lat").toString();
+
+            DecimalFormat df = new DecimalFormat("#.######");
+            String lngStr = df.format(Double.parseDouble(lng));
+            String latStr = df.format(Double.parseDouble(lat));
+            String r = latStr + "," + lngStr;
+            return r;
+        }
+
+        return null;
+    }
+
+    /**
+     * 调用百度地图驾车路线规划服务接口，根据寄件人地址和收件人地址坐标计算订单距离
+     *
+     * @param origin
+     * @param destination
+     * @return
+     */
+    public  Double getDistance(String origin, String destination) {
+        String httpUrl = "http://api.map.baidu.com/directionlite/v1/driving?origin="
+                + origin + "&destination="
+                + destination + "&ak=" + AK;
+
+        String json = loadJSON(httpUrl);
+
+        Map map = JSON.parseObject(json, Map.class);
+        if ("0".equals(map.getOrDefault("status", "500").toString())) {
+            Map childMap = (Map) map.get("result");
+            JSONArray jsonArray = (JSONArray) childMap.get("routes");
+            JSONObject jsonObject = (JSONObject) jsonArray.get(0);
+            double distance = Double.parseDouble(jsonObject.get("distance") == null ? "0" : jsonObject.get("distance").toString());
+            return distance;
+        }
+
+        return null;
+    }
+
+    /**
+     * 调用百度地图驾车路线规划服务接口，根据寄件人地址和收件人地址坐标计算订单距离
+     *
+     * @param origin
+     * @param destination
+     * @return
+     */
+    public  Integer getTime(String origin, String destination) {
+        String httpUrl = "http://api.map.baidu.com/directionlite/v1/driving?origin="
+                + origin + "&destination="
+                + destination + "&ak=" + AK;
+
+        String json = loadJSON(httpUrl);
+
+        Map map = JSON.parseObject(json, Map.class);
+        if ("0".equals(map.getOrDefault("status", "500").toString())) {
+            Map childMap = (Map) map.get("result");
+            JSONArray jsonArray = (JSONArray) childMap.get("routes");
+            JSONObject jsonObject = (JSONObject) jsonArray.get(0);
+            int time = Integer.parseInt(jsonObject.get("duration") == null ? "0" : jsonObject.get("duration").toString());
+            return time;
+        }
+
+        return null;
+    }
+
+    /**
+     * 调用服务接口，返回百度地图服务端的结果
+     *
+     * @param httpUrl
+     * @return
+     */
+    public static String loadJSON(String httpUrl) {
+        StringBuilder json = new StringBuilder();
+        try {
+            URL url = new URL(httpUrl);
+            URLConnection urlConnection = url.openConnection();
+            BufferedReader in = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "UTF-8"));
+            String inputLine = null;
+            while ((inputLine = in.readLine()) != null) {
+                json.append(inputLine);
+            }
+            in.close();
+        } catch (MalformedURLException e) {
+        } catch (IOException e) {
+        }
+        System.out.println(json.toString());
+        return json.toString();
     }
 }
 

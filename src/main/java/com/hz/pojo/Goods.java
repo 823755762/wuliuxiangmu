@@ -1,16 +1,13 @@
 package com.hz.pojo;
 
 import com.baomidou.mybatisplus.annotation.IdType;
-import java.util.Date;
-import com.baomidou.mybatisplus.annotation.Version;
 import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableLogic;
-import com.baomidou.mybatisplus.annotation.TableField;
-import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+
+import java.io.Serializable;
 
 /**
  * <p>
@@ -36,7 +33,7 @@ public class Goods implements Serializable {
     /**
      * 货物编号
      */
-    private Long goodsNumber;
+    private String goodsNumber;
 
     /**
      * 条纹码（待定）
@@ -52,7 +49,10 @@ public class Goods implements Serializable {
      * 值(重量)
      */
     private String goodsValue;
-
+    /**
+     * 体积，
+     */
+    private String goodsVolume;
     /**
      * 单位id
      */
