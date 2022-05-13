@@ -49,16 +49,34 @@ public class RbacAuthorityService {
         if (requestURI.equals("/driver/tihuo")) {
             return true;
         }
+        if (requestURI.equals("/driver/allorderss2")) {
+            return true;
+        }
+        if (requestURI.equals("/driver/findOrderStatusRecord")) {
+            return true;
+        }
         if (requestURI.equals("/driver/diverallorders")) {
             return true;
         }
+        if (requestURI.equals("/driver/allOrderss")) {
+            return true;
+        }
         if (requestURI.equals("/driver/kaoqin")) {
+            return true;
+        }
+        if (requestURI.equals("/driver/driverid")) {
             return true;
         }
         if (requestURI.equals("/user/loginOut")) {
             return true;
         }
         if (requestURI.equals("/user/exit")) {
+            return true;
+        }
+        if (requestURI.equals("/driver/findvehicle")) {
+            return true;
+        }
+        if (requestURI.equals("/driver/zhuangtai")) {
             return true;
         }
         if (requestURI.equals("/menu/getList")) {

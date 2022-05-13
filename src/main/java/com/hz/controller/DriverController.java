@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hz.mapper.*;
 import com.hz.pojo.*;
 import com.hz.service.DriverService;
+import com.hz.service.OrderStatusRecordService;
 import com.hz.utils.JsonMassage;
 import jdk.nashorn.internal.runtime.linker.JavaAdapterFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +16,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import sun.rmi.runtime.Log;
 
+import javax.xml.bind.util.JAXBSource;
 import java.lang.System;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -43,6 +46,62 @@ public class DriverController {
     private WaybillInfoMapper waybillInfoMapper;
     @Autowired
     private DriverService driverService;
+    @Autowired
+    private  VehicleMapper vehicleMapper;
+    @RequestMapping("/zhuangtai")
+    public JsonMassage zhuangtai(int index,Long driverId){
+        JsonMassage jsonMassage = new JsonMassage();
+        Driver driver = driverMapper.selectById(driverId);
+
+        Vehicle vehicle = vehicleMapper.selectById(driver.getDriverAttributionId());
+        if (vehicle!=null) {
+            vehicle.setVehicleStatus(index);
+            int i = vehicleMapper.updateById(vehicle);
+            if (i == 1) {
+                jsonMassage.setCode(200);
+                return jsonMassage;
+            }
+        }
+        jsonMassage.setCode(500);
+        return jsonMassage;
+    }
+    @RequestMapping("/findOrderStatusRecord")
+    public JsonMassage<OrderStatusRecord> findOrderStatusRecord(Integer id){
+        OrderStatusRecord orderStatusRecord = orderStatusRecordMapper.selectById(id);
+        JsonMassage<OrderStatusRecord> jsonMassage = new JsonMassage<>(200,"ok",1,orderStatusRecord);
+        return jsonMassage;
+    }
+    @RequestMapping("/allorderss2")
+    public JsonMassage allOrderss2(Long driverId){
+        JsonMassage jsonMassage = new JsonMassage();
+        Driver driver = driverMapper.selectById(driverId);
+        if (driver == null) {
+            jsonMassage.setCode(500);
+            return jsonMassage;
+        }
+        QueryWrapper<Orderss> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("vehicle_id",driver.getDriverAttributionId());
+        queryWrapper.eq("order_state",3).or().eq("order_state",4);
+        queryWrapper.eq("vehicle_id",driver.getDriverAttributionId());
+        List<Orderss> ordersses = orderssMapper.selectList(queryWrapper);
+
+        jsonMassage.setCode(200);
+        jsonMassage.setData(ordersses);
+        jsonMassage.setMsg("true");
+        return jsonMassage;
+    }
+    @RequestMapping("/allOrderss")
+    public JsonMassage allOrderss(){
+        JsonMassage jsonMassage = new JsonMassage();
+        List<Orderss> ordersses = orderssMapper.selectList(null);
+        if (ordersses == null) {
+            jsonMassage.setCode(500);
+            return jsonMassage;
+        }
+        jsonMassage.setData(ordersses);
+        jsonMassage.setCode(200);
+        return jsonMassage;
+    }
     @RequestMapping("/findGoods")
     public JsonMassage findGoods(Long id){
         JsonMassage jsonMassage = new JsonMassage();
@@ -283,6 +342,15 @@ public class DriverController {
 
     }
 
+    @RequestMapping("/findvehicle")
+    public JsonMassage<Vehicle> findvehicle(Integer id){
+        Driver driver=driverMapper.selectById(id);
+        Long i=driver.getDriverAttributionId();
+        Vehicle vehicle=vehicleMapper.selectById(i);
+        JsonMassage<Vehicle> jsonMassage=new JsonMassage<Vehicle>(200,"ok",1,vehicle);
+
+        return jsonMassage;
+    }
 
 }
 

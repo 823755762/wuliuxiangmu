@@ -39,7 +39,7 @@ public class WarehouseController {
             @RequestParam(value = "pageNo",defaultValue = "1") Integer pageNo,
             @RequestParam(value="pageSize",defaultValue = "10") Integer pageSize,
             Integer warehouseType,
-            Integer warehouseNumber,
+            String warehouseNumber,
             Integer warehouseState
     ) {
         QueryWrapper<Warehouse> queryWrap = new QueryWrapper<Warehouse>();

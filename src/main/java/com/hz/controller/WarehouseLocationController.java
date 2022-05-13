@@ -40,8 +40,8 @@ public class WarehouseLocationController {
     public JsonMassage<List<WarehouseLocation>> selectPageList(
             @RequestParam(value = "pageNo",defaultValue = "1") Integer pageNo,
             @RequestParam(value="pageSize",defaultValue = "10") Integer pageSize,
-            Integer warehouseId,
-            Integer warehouseLocationNumber,
+            String warehouseId,
+            String warehouseLocationNumber,
             Integer warehouseLocationState
 
     ) {
