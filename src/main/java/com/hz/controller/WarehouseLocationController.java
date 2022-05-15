@@ -127,5 +127,11 @@ public class WarehouseLocationController {
         return jsonMap;
 
     }
+    @RequestMapping("/warehouseLocatioAll")
+    public JsonMassage<List<WarehouseLocation>> warehouseLocatioAll() {
+        List<WarehouseLocation> list = warehouseService.list();
+        JsonMassage<List<WarehouseLocation>> jsonMap = new JsonMassage<List<WarehouseLocation>>(200, "ok", null, list);
+        return jsonMap;
+    }
 }
 

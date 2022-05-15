@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -101,7 +102,13 @@ public class OrderssController {
         SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");
         waybillId = df.format(new Date()) + (int) ((Math.random() * 9 + 1) * 1000);//2022 0505 1539 3361 17
         orderss.setWaybillId(Long.valueOf(waybillId));
+        orderss.setOrderAllAmount(orderss.getPrepaymentAmount());
+        //获取付款总金额 计算剩余付款金额
+        BigDecimal orderEstimatedAmount = orderss.getOrderEstimatedAmount();
+        BigDecimal orderAllAmount = orderss.getOrderAllAmount();
+        BigDecimal subtract = orderEstimatedAmount.subtract(orderAllAmount);
 
+        orderss.setRemainingAmount(subtract);
         if (origin != null && destination != null) {
             //获取始发地地址
             String orderFromTitle = "";
@@ -180,6 +187,17 @@ public class OrderssController {
 
     @RequestMapping("/updateById")
     public JsonMassage<Orderss> updateById(Orderss orderss) {
+        //获取付款总金额 计算剩余付款金额
+        BigDecimal orderEstimatedAmount = orderss.getOrderActualAmount();
+        BigDecimal orderAllAmount = orderss.getOrderAllAmount();
+        BigDecimal subtract = orderEstimatedAmount.subtract(orderAllAmount);
+        orderss.setRemainingAmount(subtract);
+        int i = orderss.getOrderAllAmount().compareTo(orderss.getOrderActualAmount());
+        if(i==1&&orderss.getOrderState()==3||i==1&&orderss.getOrderState()==4){
+            BigDecimal i1 = new BigDecimal("0");
+            orderss.setOrderState(4);
+            orderss.setRemainingAmount(i1);
+        }
         boolean updateById = orderssService.updateById(orderss);
         JsonMassage<Orderss> jsonMassage = new JsonMassage<Orderss>(200, "ok", null, null);
         return jsonMassage;
@@ -318,6 +336,13 @@ public class OrderssController {
         boolean b1 = vehicleService.updateById(vehicle);
         JsonMassage<Orderss> jsonMassage = new JsonMassage<Orderss>(200, "ok", null, null);
         return jsonMassage;
+    }
+    @RequestMapping("/urls")
+    public JsonMassage<String[]>  urls (Integer orderId) {
+        Orderss orderss = orderssService.getById(orderId);
+        String[] split = orderss.getContractPicture().split(",");
+        JsonMassage<String[]> jsonMas = new JsonMassage<String[]>(200, "ok", null, split);
+        return jsonMas;
     }
 }
 
