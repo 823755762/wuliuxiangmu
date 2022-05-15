@@ -5,13 +5,10 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hz.mapper.EmployeesMapper;
 import com.hz.pojo.Employees;
-import com.hz.service.EmployeesService;
+import com.hz.pojo.Warehouse;
 import com.hz.utils.JsonMassage;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 import java.sql.Timestamp;
@@ -35,14 +32,46 @@ public class EmployeesController {
 
     @Autowired
     private EmployeesMapper employeesMapper;
-    @Autowired
-    private EmployeesService employeesService;
     DateTimeFormatter dtf = DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm:ss");
     LocalDateTime now = LocalDateTime.now();
     //  2022-04-27 15:46:30
     String nowTime = dtf.format(now);
 
-    @RequestMapping("/findall")
+
+    @RequestMapping(value = "/employeesList")
+    @ResponseBody
+    public JsonMassage<List<Employees>> employeesList(
+            @RequestParam(value = "pageNo", defaultValue = "1") Integer pageNo,
+            @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize,
+            Integer employeesId
+    ) {
+        System.out.println("进入employeesList222222222222222222222222222222222222222222222222222222");
+        Page<Employees> page = new Page<>(pageNo, pageSize);
+        QueryWrapper<Employees> wrapper = new QueryWrapper<>();
+//        wrapper.like("employees_id", employeesId).or().like("employees_name", employeesName);
+        wrapper.like("employees_id", employeesId);
+        if (employeesId != null ) {
+            employeesMapper.selectPage(page, wrapper);
+        } else {
+            employeesMapper.selectPage(page, null);
+        }
+        wrapper.orderByDesc("employees_id");
+        Integer count = Math.toIntExact(page.getTotal());
+        List<Employees> list = page.getRecords();
+        System.out.println("list++++++++++++++++++++++++++++++++++++++++"+list.toString());
+//        JsonMassage<List<Employees>> jsonMassage = new JsonMassage<List<Employees>>();
+        JsonMassage<List<Employees>> jsonMassage = new JsonMassage<List<Employees>>(200,"请求成功",count,list);
+//        jsonMassage.setCode(200);
+//        jsonMassage.setMsg("ok");
+//        jsonMassage.setData(list);
+//        jsonMassage.setDataCount(count);
+        return jsonMassage;
+    }
+
+
+
+
+    @RequestMapping(value = "/findall" ,method = RequestMethod.GET)
     public JsonMassage<List<Employees>> findall(
             @RequestParam(value = "pageNo", defaultValue = "1") Integer pageNo,
             @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize,
@@ -117,12 +146,6 @@ public class EmployeesController {
         jsonMassage.setData(employees);
         jsonMassage.setDataCount(1);
         return jsonMassage;
-    }
-    @RequestMapping("/employeesList")
-    public JsonMassage<List<Employees>> employeesList() {
-        List<Employees> list = employeesService.list();
-        JsonMassage<List<Employees>> jsonMas = new JsonMassage<List<Employees>>(200, "ok", null, list);
-        return jsonMas;
     }
 
 }

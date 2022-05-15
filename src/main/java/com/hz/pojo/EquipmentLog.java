@@ -36,22 +36,22 @@ public class EquipmentLog implements Serializable {
     @TableId(value = "equipment_log_id", type = IdType.AUTO)
     private Long equipmentLogId;
 
-    /**
-     * 排查时间
-     */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    private Date equipmentLogTime;
+//    /**
+//     * 排查时间
+//     */
+//    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+//    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+//    private Date equipmentLogTime;
 
     /**
      * 设备id
      */
-    private Long equipmentLogEquipmentId;
+    private String equipmentId;
 
     /**
      * 排查员工id
      */
-    private Long employeeId;
+    private String employeeId;
 
     /**
      * 排查信息描述
@@ -65,7 +65,7 @@ public class EquipmentLog implements Serializable {
     private Integer deleted;
 
     /**
-     * 创建时间
+     * 排查时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")

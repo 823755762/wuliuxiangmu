@@ -32,38 +32,6 @@ public class EquipmentFireController {
     private EquipmentFireMapper equipmentFireMapper;
 
 
-//    /**
-//     * 分页查询  多条件
-//     * @param pageNo  当前页
-//     * @param pageSize 每页显示条数
-//     * @return
-//     */
-//    @RequestMapping(value = "/findProviderList1",method = RequestMethod.GET)
-//    @ResponseBody
-//    public JsonMassage<List<EquipmentFire>> findProviderList1(
-//            @RequestParam(value = "pageNo",defaultValue = "1") Integer pageNo,
-//            @RequestParam(value = "pageSize",defaultValue = "10") Integer pageSize,
-//            String proName,
-//            String proDesc
-//    ){
-//        List<EquipmentFire> list = equipmentFireService.findProviderList1(pageNo,pageSize,proName,proDesc);
-//        System.out.println(list.toString());
-//        Integer count = equipmentFireService.findProviderListCount1(proName,proDesc);
-//        JsonMassage<List<EquipmentFire>> jsonMassage = new JsonMassage<List<EquipmentFire>>();
-//        jsonMassage.setCode(200);
-//        jsonMassage.setMsg("ok");
-//        jsonMassage.setCount(count);
-//        jsonMassage.setData(list);
-//        return jsonMassage;
-//    }
-//
-//    @RequestMapping(value = "/a")
-//    public  JsonMassage<List<EquipmentFire>> all(){
-//    List<EquipmentFire> list = equipmentFireService.list();
-//    JsonMassage<List<EquipmentFire>> json = new JsonMassage<List<EquipmentFire>>(200,"ok",10,list);
-//    return json;
-//    }
-
     //    删除数据
     @RequestMapping(value = "shanchu")
     public ResultJson shanchu(EquipmentFire equipmentFire){
@@ -111,12 +79,15 @@ public class EquipmentFireController {
 
 
     @RequestMapping(value = "/chaxun")
+    @ResponseBody
     public JsonMassage<List<EquipmentFire>> getList(
             //defaultValue=当前页  defaultValue==每页条数
             @RequestParam(value = "pageNo",defaultValue = "1") Integer pageNo,
             @RequestParam(value = "pageSize",defaultValue = "10") Integer pageSize,
             String equipmentFireName,
-             String equipmentFireId
+             String equipmentFireId,
+            String createTime,
+            String updateTime
     ) {
         //直接调用父类的baseMapper对象方法查询并返回数据
         QueryWrapper qw = new QueryWrapper();
@@ -128,10 +99,19 @@ public class EquipmentFireController {
         if (equipmentFireId!=null){
             qw.eq("equipment_fire_id",equipmentFireId);
         }
-        Page<EquipmentFire> page1 = new Page<EquipmentFire>(pageNo,pageSize);
+        if ("" != createTime && createTime != null) {
+            qw.apply("date_format(create_time,'%Y-%m-%d') >= date_format( '" + createTime + " ','%Y-%m-%d')");
+
+        }
+        if ("" != updateTime && updateTime != null) {
+            qw.apply("date_format(update_time,'%Y-%m-%d') <= date_format( '" + updateTime + " ','%Y-%m-%d')");
+
+        }
+        qw.orderByDesc("create_time");
+        Page <EquipmentFire> page1 = new Page<EquipmentFire>(pageNo,pageSize);
 //        equipmentFireService.page(page1, qw);的page是一个方法叫page
         Page page2 = equipmentFireService.page(page1, qw);
-        Integer count = Math.toIntExact(page2.getTotal());
+        Integer count = Math.toIntExact(page1.getTotal());
         JsonMassage<List<EquipmentFire>>  json = new JsonMassage<List<EquipmentFire>>(200,"ok",count,page2.getRecords());
         System.out.println("page2==========="+page2.getRecords());
         return json;

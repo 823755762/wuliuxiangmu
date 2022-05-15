@@ -57,6 +57,11 @@ public class Equipment implements Serializable {
     private String equipmentParameter1;
 
     /**
+     * 合同图片
+     */
+    private String contractPicture;
+
+    /**
      * 参数2
      */
     private String equipmentParameter2;

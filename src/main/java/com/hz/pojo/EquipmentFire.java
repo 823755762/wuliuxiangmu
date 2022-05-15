@@ -50,12 +50,12 @@ public class EquipmentFire implements Serializable {
     /**
      * 设备管理员工id
      */
-    private Long employeesId;
+    private String employeesId;
 
     /**
      * 仓库ID
      */
-    private Integer warehouseId;
+    private String warehouseId;
 
     /**
      * 逻辑删除0-->正常 1-->删除 

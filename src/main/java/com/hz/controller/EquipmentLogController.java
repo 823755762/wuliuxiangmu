@@ -39,6 +39,22 @@ public class EquipmentLogController {
     private EquipmentLogMapper equipmentLogMapper;
 
 
+
+
+
+
+
+
+//    //多表
+//    @RequestMapping(value = "duobiao")
+//    public JsonMassage<EquipmentFire> duobiao(){
+//        System.out.println("duobiao===========================================");
+//        EquipmentLog equipmentLog = equipmentLogMapper
+//        JsonMassage<EquipmentFire> json = new JsonMassage<EquipmentFire>(200,"ok",1,equipmentLog);
+//        return json;
+//    }
+
+
     //    删除数据
     @RequestMapping(value = "shanchu")
     public ResultJson shanchu(EquipmentLog equipmentLog){
@@ -89,24 +105,30 @@ public class EquipmentLogController {
             //defaultValue=当前页  defaultValue==每页条数
             @RequestParam(value = "pageNo",defaultValue = "1") Integer pageNo,
             @RequestParam(value = "pageSize",defaultValue = "10") Integer pageSize,
-            String equipmentLogDescribe,
-            String equipmentLogId
+            String equipmentId,
+            String createTime,
+            String employeeId
     ) {
         System.out.println("************************************************************");
         //直接调用父类的baseMapper对象方法查询并返回数据
         QueryWrapper qw = new QueryWrapper();
 //        如果equipmentFireName不是null就查询数据，是null的话默认搜索全部
-        if (equipmentLogDescribe!=null){
+        if (equipmentId!=null){
             //equipment_fire_name是数据库名字
             System.out.println("进入iffffffffffffffffffff");
-            qw.like("equipment_log_describe",equipmentLogDescribe);
+            qw.eq("equipment_id",equipmentId);
         }
-        if (equipmentLogId!=null){
-            qw.eq("equipment_log_id",equipmentLogId);
+        if ("" != createTime && createTime != null) {
+            qw.apply("date_format(create_time,'%Y-%m-%d') = date_format( '" + createTime + " ','%Y-%m-%d')");
+
         }
+        if (employeeId!=null){
+            qw.eq("employee_id",employeeId);
+        }
+        qw.orderByDesc("create_time");
         Page<EquipmentLog> page1 = new Page<EquipmentLog>(pageNo,pageSize);
 //        equipmentFireService.page(page1, qw);的page是一个方法叫page
-        Page page2 = equipmentLogService.page(page1, qw);
+        Page page2 = equipmentLogService.page(page1,qw);
         Integer count = Math.toIntExact(page2.getTotal());
         JsonMassage<List<EquipmentLog>>  json = new JsonMassage<List<EquipmentLog>>(200,"ok",count,page2.getRecords());
         System.out.println("page2==========="+page2.getRecords());
