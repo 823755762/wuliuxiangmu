@@ -29,6 +29,37 @@ public class WarehouseController {
     @Autowired
     private WarehouseService warehouseService;
 
+
+    @RequestMapping(value = "/warehouseAll")
+    @ResponseBody
+    public JsonMassage<List<Warehouse>> warehouseAll(
+            @RequestParam(value = "pageNo",defaultValue = "1") Integer pageNo,
+            @RequestParam(value="pageSize",defaultValue = "10") Integer pageSize,
+            Integer warehouseType,
+            String warehouseNumber,
+            Integer warehouseState
+    ) {
+        QueryWrapper<Warehouse> queryWrap = new QueryWrapper<Warehouse>();
+        if (warehouseType != null){
+            queryWrap.like("warehouse_type", warehouseType);
+        }
+        if (warehouseNumber != null) {
+            queryWrap.like("warehouse_number", warehouseNumber);
+        }
+        if (warehouseState != null) {
+            queryWrap.like("warehouse_state", warehouseState);
+        }
+        queryWrap.orderByDesc("warehouse_id");
+        Page<Warehouse> page = new Page<Warehouse>(pageNo, pageSize);
+        Page<Warehouse> list = warehouseService.page(page, queryWrap);
+
+        Integer total = Math.toIntExact(page.getTotal());
+        List<Warehouse> records = page.getRecords();
+        JsonMassage<List<Warehouse>> jsonMassage = new JsonMassage<List<Warehouse>>(200,"请求成功",total,records);
+        return jsonMassage;
+    }
+
+
     /**
      * VUE 调用 分页查询  多条件
      * @return
