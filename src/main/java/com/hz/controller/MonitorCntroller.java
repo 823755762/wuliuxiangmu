@@ -1,6 +1,9 @@
 package com.hz.controller;
 
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.hz.monitor.PTZ.StartPTZ;
 import com.hz.monitor.PTZ.StopPTZ;
 import com.hz.monitor.api.ServerConstant;
@@ -10,15 +13,33 @@ import com.hz.monitor.equipment.AddDevice;
 import com.hz.monitor.equipment.ChangeDeviceName;
 import com.hz.monitor.equipment.DeleteDevice;
 import com.hz.monitor.equipment.GetDeviceInfo;
+import com.hz.pojo.Driver;
+import com.hz.pojo.Orderss;
+import com.hz.pojo.VehicleSafety;
+import com.hz.service.DriverService;
+import com.hz.service.OrderssService;
+import com.hz.service.VehicleSafetyService;
+import com.hz.utils.JsonMassage;
+import com.hz.utils.behaviors.DriverBehavior;
 import com.hz.utils.monitor.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping("/orderss")
 public class MonitorCntroller {
 
     private ServerConstant serverConstant;
+    @Autowired
+    private VehicleSafetyService vehicleSafetyService;
+    @Autowired
+    private DriverService driverService;
+    @Autowired
+    private OrderssService orders;
 
     /**
      * 启动云台
@@ -31,9 +52,10 @@ public class MonitorCntroller {
     @RequestMapping("/startPTZ")
     public BasicResponse<BaseDeviceResponse> startPTZ(String accessToken, String deviceSerial, int direction) {
         accessToken = getToken();
-        StartPTZ startPTZ = new StartPTZ(accessToken, deviceSerial, 1, direction, 2);
+        StartPTZ startPTZ = new StartPTZ(accessToken, deviceSerial, 1, direction, 1);
         BasicResponse<BaseDeviceResponse> basicResponse = startPTZ.executeApi();
         return basicResponse;
+
     }
 
     /**
@@ -62,11 +84,64 @@ public class MonitorCntroller {
      * @return
      */
     @RequestMapping("/CapturePic")
-    public BasicResponse<CapturePicture> CapturePic(String accessToken, String deviceSerial) {
-        accessToken = getToken();
-        CapturePic capturePicApi = new CapturePic(accessToken, "E48050794");
+    public BasicResponse<CapturePicture> CapturePic(String accessToken, String deviceSerial, Long vehicleId) {
+        CapturePic capturePicApi = new CapturePic(accessToken, deviceSerial);
         BasicResponse<CapturePicture> basicResponse = capturePicApi.executeApi();
-        System.out.println(basicResponse.getData().getPicUrl());
+
+
+        //行为分析
+        String s = DriverBehavior.driver_behavior(basicResponse.getData().getPicUrl());
+        System.out.println(s);
+        JSONObject jsonObject = JSONObject.parseObject(s);
+        JSONArray eyes = JSON.parseArray(jsonObject.getString("person_info"));
+        if (eyes.size()!=0) {
+            JSONObject attributes = (JSONObject) eyes.getJSONObject(0).get("attributes");
+            //驾驶员属性行为内容
+            /*JSONObject both_hands_leaving_wheel= (JSONObject) attributes.get("both_hands_leaving_wheel");*/
+
+            //eyes_closed   闭眼
+            JSONObject eyes_closed = (JSONObject) attributes.get("eyes_closed");
+            Object closedScore = eyes_closed.get("score");
+            Object closedThreshold = eyes_closed.get("threshold");
+
+            String substring = closedScore.toString().substring(0, 5);
+            Double eyesScore = Double.parseDouble(substring);
+            Double eyesThreshold = Double.parseDouble(closedThreshold.toString());
+
+            //eyes_closed   安全带
+            JSONObject not_buckling_up = (JSONObject) attributes.get("not_buckling_up");
+            Object bucklingScore = not_buckling_up.get("score");
+            Object bucklingThreshold = not_buckling_up.get("threshold");
+            Double notBucklingScore = Double.parseDouble(bucklingScore.toString());
+            Double notBucklingThreshold = Double.parseDouble(bucklingThreshold.toString());
+
+            List list = new ArrayList<>();
+
+            //查询车辆信息
+            Driver driver = driverService.getById(vehicleId);
+            VehicleSafety safety = new VehicleSafety();
+            safety.setVehicleId(vehicleId);
+            safety.setDriverId(driver.getDriverId());
+            Orderss orders = this.orders.getById(vehicleId);
+            safety.setWaybillInfoId(orders.getWaybillId());
+            safety.setImage(basicResponse.getData().getPicUrl());
+
+            if (eyesScore > eyesThreshold) {
+                list.add(1);
+                safety.setVehicleSafetyId(1L);
+            } else {
+                list.add(0);
+                safety.setVehicleSafetyId(0L);
+            }
+            if (notBucklingScore > notBucklingThreshold) {
+                list.add(2);
+                safety.setVehicleSafetyId(2L);
+            } else {
+                list.add(0);
+                safety.setVehicleSafetyId(0L);
+            }
+            vehicleSafetyService.save(safety);
+        }
         return basicResponse;
     }
 
@@ -121,7 +196,7 @@ public class MonitorCntroller {
      *
      * @param accessToken
      * @param deviceSerial
-     * @param deviceName    新名字
+     * @param deviceName   新名字
      * @return
      */
 
@@ -145,11 +220,21 @@ public class MonitorCntroller {
      * @return
      */
     private static String getToken() {
-
         GetToken getToken = new GetToken("85062adab25e4db29ce73d162de73027", "95ff75bc9a7ad9772b947f02577c26aa");
         BasicResponse<AccessToken> response = getToken.executeApi();
         AccessToken dataInternal = response.getData();
         String accessToken = dataInternal.getAccessToken();
         return accessToken;
     }
+
+    /**
+     * 获取token
+     */
+    @RequestMapping("/token")
+    public JsonMassage<String> token() {
+        JsonMassage<String> jsonMassage = new JsonMassage<String>(200, "ok", null, getToken());
+        return jsonMassage;
+    }
+
+
 }
