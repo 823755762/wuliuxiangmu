@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -51,14 +52,22 @@ public class GoodsTypeController {
                     Integer pageNo,
             @RequestParam(value = "pageSize", defaultValue = "10")
                     Integer pageSize,
-            String goodsTypeName
-            //,Long goodsTypeId
+            String goodsTypeName,
+            Date createTime,
+            Date updateTime
+
     ) {
         QueryWrapper<GoodsType> queryWrapper = new QueryWrapper<GoodsType>();
         if (goodsTypeName != null) {
             queryWrapper.like("goods_type_name", goodsTypeName);
         }
 
+        if (createTime != null) {
+            queryWrapper.like("create_time", createTime);
+        }
+        if (updateTime != null) {
+            queryWrapper.like("update_time", updateTime);
+        }
         Page<GoodsType> page = new Page<>(pageNo, pageSize);
 
         Page<GoodsType> page2 = goodsTypeService.page(page, queryWrapper);
@@ -120,15 +129,15 @@ public class GoodsTypeController {
     //修改
     @RequestMapping("/updatetype")
     public JsonMassage updatebyid(GoodsType goodsType) {
-          DateTimeFormatter dtf = DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm:ss");
-          LocalDateTime now = LocalDateTime.now();
-          String format = dtf.format(now);    //  2022-04-27 15:46:30
-          goodsType.setUpdateTime(format);
+//          DateTimeFormatter dtf = DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm:ss");
+//          LocalDateTime now = LocalDateTime.now();
+//          String format = dtf.format(now);    //  2022-04-27 15:46:30
+//          goodsType.setUpdateTime(format);
         int i = goodsTypeMapper.updateById(goodsType);
         JsonMassage jsonMassage = new JsonMassage<>();
         jsonMassage.setCode(200);
         jsonMassage.setMsg("ok");
-        jsonMassage.setData(i);
+        jsonMassage.setData(goodsType);
         jsonMassage.setDataCount(1);
 
         return jsonMassage;

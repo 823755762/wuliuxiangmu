@@ -62,7 +62,7 @@ public class EquipmentController {
         //获取时间戳+4位随机数
         SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");
         waybillId = df.format(new Date()) + (int) ((Math.random() * 9 + 1) * 1000);//2022 0505 1539 3361 17
-        equipment.setEquipmentSerial(Long.valueOf(waybillId));
+//        equipment.setEquipmentSerial(Long.valueOf(waybillId));
         int i = equipmentMapper.insert(equipment);
         ResultJson resultJson = new ResultJson(i);
         resultJson.setCode(200);

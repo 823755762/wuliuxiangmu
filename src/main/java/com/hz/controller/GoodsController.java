@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -46,6 +47,93 @@ public class GoodsController {
      * @param pageSize 每页显示条数
      * @return
      */
+    @RequestMapping(value = "/like")
+    public JsonMassage<List<Goods>> like(
+            //defaultValue=当前页  defaultValue==每页条数
+            @RequestParam(value = "pageNo", defaultValue = "1")
+                    Integer pageNo,
+            @RequestParam(value = "pageSize", defaultValue = "10")
+                    Integer pageSize,
+            String goodsNumber,
+            Long goodsTypeId,
+            Integer goodsIsStorage,
+            String goodsTypeName,
+            Date createTime,
+            Date updateTime
+
+
+    ) {
+
+        QueryWrapper queryWrapper = new QueryWrapper();
+        if (goodsNumber != null) {
+            queryWrapper.like("goods_number", goodsNumber);
+        }
+        if (goodsIsStorage != null) {
+            queryWrapper.eq("goods_is_storage", goodsIsStorage);
+        }
+        if (goodsTypeId != null) {
+            queryWrapper.like("goods_type_id", goodsTypeId);
+        }
+        if (goodsTypeName != null) {
+            queryWrapper.like("goods_type_name", goodsTypeName);
+        }
+        if (createTime != null) {
+            queryWrapper.like("create_time", createTime);
+        }
+        if (updateTime != null) {
+            queryWrapper.like("update_time", updateTime);
+        }
+        queryWrapper.orderByDesc("create_time");
+        Page<Goods> page = new Page<Goods>(pageNo, pageSize);
+
+        Page<Goods> page1 = goodsService.page(page, queryWrapper);
+
+        JsonMassage<List<Goods>> jsonMassage = new JsonMassage<List<Goods>>
+                (200, "ok", Math.toIntExact(page.getTotal()), page1.getRecords());
+        return jsonMassage;
+
+
+    }
+
+    //添加
+    @RequestMapping("/add")
+    public JsonMassage add(Goods goods) {
+        int i = goodsMapper.insert(goods);
+        JsonMassage jsonMassage = new JsonMassage(200,"ok",1,goods);
+        return jsonMassage;
+    }
+
+    //查询单个对象
+    @RequestMapping("/select")
+    public JsonMassage<Goods> selectid(Integer id) {
+        Goods goods = goodsMapper.selectById(id);
+        JsonMassage<Goods> jsonMassage = new JsonMassage<>(200,"ok",1,goods);
+        return jsonMassage;
+    }
+
+
+    //删除
+    @RequestMapping("/delete")
+    public JsonMassage delete(Integer goodsId) {
+        System.out.println("进入delete---------------------------------");
+        System.out.println("id--------------------------"+goodsId);
+        int i = goodsMapper.deleteById(goodsId);
+        JsonMassage jsonMassage = new JsonMassage(200,"ok",1,i);
+        return jsonMassage;
+    }
+
+    //修改
+    @RequestMapping("/update")
+    public JsonMassage update(Goods goods) {
+//        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm:ss");
+//        LocalDateTime now = LocalDateTime.now();
+//        String format = dtf.format(now);    //  2022-04-27 15:46:30
+//        goods.setUpdateTime(format);
+        int i = goodsMapper.updateById(goods);
+        JsonMassage<Goods> jsonMassage = new JsonMassage<>(200,"ok",1,goods);
+        return jsonMassage;
+
+    }
     @RequestMapping(value = "/chaxun")
     public JsonMassage<List<Goods>> chaxun(
             //defaultValue=当前页  defaultValue==每页条数
@@ -102,7 +190,7 @@ public class GoodsController {
     //添加
     @RequestMapping("/addlist")
     @ResponseBody
-    public JsonMassage add(Goods goods) {
+    public JsonMassage add1(Goods goods) {
         int i = goodsMapper.insert(goods);
         JsonMassage jsonMassage = new JsonMassage();
         jsonMassage.setCode(200);
@@ -142,10 +230,6 @@ public class GoodsController {
     //修改
     @RequestMapping("/updateid")
     public JsonMassage updateid(Goods goods) {
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm:ss");
-        LocalDateTime now = LocalDateTime.now();
-        String format = dtf.format(now);    //  2022-04-27 15:46:30
-        goods.setUpdateTime(format);
         int i = goodsMapper.updateById(goods);
         JsonMassage jsonMassage = new JsonMassage<>();
         jsonMassage.setCode(200);

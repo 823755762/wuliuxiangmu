@@ -263,13 +263,15 @@ public class DriverController {
             String driverName, Integer Idcard) {
         Page<Driver> page = new Page<Driver>(pageNo, pageSize);
         QueryWrapper<Driver> queryWrap = new QueryWrapper<>();
-        queryWrap.eq("driver_name", driverName).or().eq("driver_Idcard", Idcard);
         if (driverName != null || Idcard != null) {
-            driverMapper.selectPage(page, queryWrap);// 输出page对象分页查询信息
+            queryWrap.orderByDesc("driver_id");
+            queryWrap.like("driver_name", driverName).or().eq("driver_Idcard", Idcard);
+            // 输出page对象分页查询信息
+            driverMapper.selectPage(page, queryWrap);
         } else {
-            driverMapper.selectPage(page, null);
+            queryWrap.orderByDesc("driver_id");
+            driverMapper.selectPage(page, queryWrap);
         }
-        queryWrap.orderByDesc("driver_id");
         Integer total = Math.toIntExact(page.getTotal());
         List<Driver> records = page.getRecords();
         JsonMassage<List<Driver>> jsonMassage = new JsonMassage<>();
@@ -292,12 +294,8 @@ public class DriverController {
     }
 
     @RequestMapping("/adddirver")
-    public JsonMassage adddriver(String driverName, String driverIdcard, Integer driverState, String driverPhone) {
-        Driver driver = new Driver();
-        driver.setDriverName(driverName);
-        driver.setDriverIdcard(driverIdcard);
-        driver.setDriverState(driverState);
-        driver.setDriverPhone(driverPhone);
+    public JsonMassage adddriver(Driver driver) {
+
         int i = driverMapper.insert(driver);
         JsonMassage resultJson = new JsonMassage();
         resultJson.setCode(200);

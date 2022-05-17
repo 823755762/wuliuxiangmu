@@ -193,7 +193,7 @@ public class OrderssController {
         BigDecimal subtract = orderEstimatedAmount.subtract(orderAllAmount);
         orderss.setRemainingAmount(subtract);
         int i = orderss.getOrderAllAmount().compareTo(orderss.getOrderActualAmount());
-        if(i==1&&orderss.getOrderState()==3||i==1&&orderss.getOrderState()==4){
+        if(i>0&&orderss.getOrderState()==3||i>=0&&orderss.getOrderState()==4){
             BigDecimal i1 = new BigDecimal("0");
             orderss.setOrderState(4);
             orderss.setRemainingAmount(i1);
@@ -332,7 +332,7 @@ public class OrderssController {
 
         Vehicle vehicle = new Vehicle();
         vehicle.setVehicleId(vehicleId);
-        vehicle.setVehicleStatus(2);
+        vehicle.setVehicleStatus(1);
         boolean b1 = vehicleService.updateById(vehicle);
         JsonMassage<Orderss> jsonMassage = new JsonMassage<Orderss>(200, "ok", null, null);
         return jsonMassage;

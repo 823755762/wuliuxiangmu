@@ -81,7 +81,6 @@ public class Equipment implements Serializable {
      */
     private String equipmentRemarks;
 
-    private String contractPicture;
 
     /**
      * 逻辑删除0-->正常 1-->删除 ==
